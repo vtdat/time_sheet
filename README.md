@@ -7,7 +7,7 @@
 <li> Nguyen Hoang Anh – ICT58 </li></p>
 <br>
 <p>30/10/2015: <br>
-- Improve the database design and interface design. <br>
+<p style="margin-left: 5px;"- Improve the database design and interface design.</p> <br>
 
 29/10/2015: <br>
 - Start design the project (design database and interface) <br></p>
