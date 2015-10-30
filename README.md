@@ -10,5 +10,5 @@
 <p>- Improve the database design and interface design.</p> <br>
 
 29/10/2015: <br>
-- Start design the project (design database and interface) <br></p>
+<p>- Start design the project (design database and interface)</p> <br></p>
 
