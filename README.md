@@ -1,18 +1,18 @@
-<h1>TIMESHEET PROJECT</h1>
+<h1 style="text-align:center">TIMESHEET PROJECT</h1>
 
 ******************************************
 
-This is a timesheet project designed and developed by ICT team.
-About: ICT Team:
-1. V? Tu?n ??t – ICT58 (leader)
-2. Nguy?n Quang Hi?n – ICT58
-3. Nguy?n Hoàng Anh – ICT58
+<p>This is a timesheet project designed and developed by ICT team.</p><br>
+<p><ol>About: ICT Team:
+<li> Vu Tuan Dat – ICT58 (leader)</li>
+<li> Nguyen Quang Hien – ICT58 </li>
+<li> Nguyen Hoang Anh – ICT58 </li></p>
 
 ******************************************
 
-30/10/2015: 
-- Improve the database design and interface design.
+<p>30/10/2015: <br>
+- Improve the database design and interface design. <br>
 
-29/10/2015: 
-- starting design the project (design database and interface)
+29/10/2015: <br>
+- starting design the project (design database and interface) <br></p>
 
