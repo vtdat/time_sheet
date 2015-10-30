@@ -9,6 +9,6 @@
 <p>30/10/2015: <br>
 <p>- Improve the database design and interface design.</p> <br>
 
-29/10/2015: <br>
+29/10/2015: <br><br>
 <p>- Start design the project (design database and interface)</p> <br></p>
 
