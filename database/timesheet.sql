@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 04, 2015 at 08:59 AM
+-- Generation Time: Nov 04, 2015 at 09:07 AM
 -- Server version: 10.0.17-MariaDB
 -- PHP Version: 5.6.14
 
@@ -42,7 +42,7 @@ CREATE TABLE `process` (
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
   `team_name` varchar(50) NOT NULL,
-  `description` text NOT NULL,
+  `description` text,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -70,8 +70,8 @@ CREATE TABLE `team_member` (
 CREATE TABLE `timesheet` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `point` float NOT NULL,
-  `comment` text NOT NULL,
+  `point` float DEFAULT NULL,
+  `comment` text,
   `date` date NOT NULL,
   `status` tinyint(1) NOT NULL,
   `created_at` date NOT NULL,
@@ -89,13 +89,20 @@ CREATE TABLE `user` (
   `user_name` varchar(30) NOT NULL,
   `password` varchar(50) NOT NULL,
   `full_name` varchar(50) NOT NULL,
-  `phone` int(11) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `phone` int(11) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
   `role` int(11) NOT NULL,
-  `avatar` varchar(100) NOT NULL,
+  `avatar` varchar(100) DEFAULT NULL,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `user_name`, `password`, `full_name`, `phone`, `email`, `role`, `avatar`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'admin', 'Vũ Tuấn Đạt', 966778295, 'tuandatk25a@gmail.com', 2, '', '0000-00-00', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -109,7 +116,7 @@ CREATE TABLE `work` (
   `team_id` int(11) NOT NULL,
   `work_time` varchar(30) NOT NULL,
   `work_name` varchar(50) NOT NULL,
-  `comment` int(11) NOT NULL,
+  `comment` int(11) DEFAULT NULL,
   `process_id` int(11) NOT NULL,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL
