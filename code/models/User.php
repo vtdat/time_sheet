@@ -23,6 +23,7 @@ use Yii;
  */
 class User extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -82,7 +83,7 @@ class User extends \yii\db\ActiveRecord
         return $this->hasMany(Timesheet::className(), ['user_id' => 'id']);
     }
 
-    public function Login ($username, $password){
+    public function userLogin($username, $password){
         $login = User::find()->where(['user_name'=>$username, 'password'=>$password]) -> count();
         if ($login == 1) {
             return true;

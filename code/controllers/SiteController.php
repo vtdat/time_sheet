@@ -3,13 +3,11 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\User;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 
-class SiteController extends Controller
+class SiteController extends \yii\web\Controller
 {
     public function behaviors()
     {
@@ -47,24 +45,29 @@ class SiteController extends Controller
         ];
     }
 
-    // public function actionIndex()
-    // {
-    //     return $this->render('index');
-    // }
-
-    public function actionLogin()
+    public function actionIndex()
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        $model = new User();
+
+        if ($model->load(Yii::$app->request->post())){
+            $request = Yii::$app->request->post('User');
+            $username = $request['user_name'];
+            $password = $request['password'];
+
+            if ($model -> userLogin($username, $password)==true){
+                Yii::$app->session->setFlash('loginSuccess');
+                $model1 = new User();
+                return $this->render('signup', ['model' => $model1]);
+            } else {
+                //code
+                Yii::$app->session->setFlash('loginFailed');
+            }
         }
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->render('index', ['model' => $model]);
     }
 
     public function actionLogout()
@@ -74,21 +77,15 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionContact()
+    public function actionSignup()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $model = new User();
+        if ($model->load(Yii::$app->request->post()) && $model->submit()) {
+            Yii::$app->session->setFlash('createUserSuccuess');
 
             return $this->refresh();
         }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
+        return $this->render('signup', ['model' => $model]);
     }
 
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
 }
