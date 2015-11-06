@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -21,7 +22,7 @@ use Yii;
  * @property TeamMember[] $teamMembers
  * @property Timesheet[] $timesheets
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
 
     /**
@@ -57,13 +58,11 @@ class User extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_name' => 'Tài khoản',
             'password' => 'Mật khẩu',
-            'full_name' => 'Full Name',
-            'phone' => 'Phone',
+            'full_name' => 'Tên',
+            'phone' => 'Điện thoại',
             'email' => 'Email',
-            'role' => 'Role',
-            'avatar' => 'Avatar',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'role' => 'Chức vụ',
+            'avatar' => 'Ảnh đại diện',
         ];
     }
 
@@ -84,8 +83,11 @@ class User extends \yii\db\ActiveRecord
     }
 
     public function userLogin($username, $password){
+
         $login = User::find()->where(['user_name'=>$username, 'password'=>$password]) -> count();
+        $identity = User::findOne(['user_name' => $username]);
         if ($login == 1) {
+            Yii::$app->user->login($identity);
             return true;
         } else return false;
     }
@@ -103,5 +105,39 @@ class User extends \yii\db\ActiveRecord
         }
         return false;
     }
+    ///
+
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                $this->auth_key = \Yii::$app->security->generateRandomString();
+            }
+            return true;
+        }
+        return false;
+    }
+    ///
+
 }
 

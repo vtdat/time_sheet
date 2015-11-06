@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+
 use Yii;
 use app\models\User;
 use yii\filters\AccessControl;
@@ -48,7 +49,7 @@ class SiteController extends \yii\web\Controller
     public function actionIndex()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect('..\web\index.php?r=timesheet');
         }
 
         $model = new User();
@@ -60,8 +61,7 @@ class SiteController extends \yii\web\Controller
 
             if ($model -> userLogin($username, $password)==true){
                 Yii::$app->session->setFlash('loginSuccess');
-                $model1 = new User();
-                return $this->render('signup', ['model' => $model1]);
+                return $this->redirect('..\web\index.php?r=timesheet');
             } else {
                 //code
                 Yii::$app->session->setFlash('loginFailed');
