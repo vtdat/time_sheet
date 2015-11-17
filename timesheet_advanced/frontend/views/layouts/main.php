@@ -48,7 +48,7 @@ AppAsset::register($this);
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];
-        $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create']];
+        $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create','id' => Yii::$app->user->identity->id]];
         $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];
 
         echo Nav::widget([

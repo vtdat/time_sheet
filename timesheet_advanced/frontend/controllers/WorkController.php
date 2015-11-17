@@ -1,19 +1,17 @@
 <?php
 
 namespace frontend\controllers;
-
+use yii\base\Model;
 use Yii;
 
 use frontend\models\Work;
 use frontend\models\WorkSearch;
 use frontend\models\Timesheet;
-use frontend\models\Process;
-use frontend\models\Team;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\i18n\Formatter;
+
 
 
 /**
@@ -70,11 +68,57 @@ class WorkController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate($id)
+    {   
+        $model = new Timesheet(['user_id'=>$id]);
+        $modelDetails = [];
+ 
+        $formDetails = Yii::$app->request->post('Work', []);
+        foreach ($formDetails as $formDetail) {
+            $modelDetail = new Work();
+            $modelDetail->setAttributes($formDetail);
+            $modelDetails[] = $modelDetail;
+        }
+ 
+        //handling if the addRow button has been pressed
+        if (Yii::$app->request->post('addRow') == 'true') {
+            $model->load(Yii::$app->request->post());
+            $modelDetails[] = new Work();
+            return $this->render('createTimesheet', [
+                'model' => $model,
+                'modelDetails' => $modelDetails
+            ]);
+        }
+ 
+        if ($model->load(Yii::$app->request->post())) {
+            if (Model::validateMultiple($modelDetails) && $model->validate()) {
+                $newmodel=Timesheet::findTimesheet($id,$model->date);
+                if($newmodel==null){
+                    Yii::$app->session->setFlash("CreateMode");
+                    $model->save();   
+                }
+                else{
+                    if($newmodel->status == 1){
+                        Yii::$app->session->setFlash("NoModify");
+                        return $this->render('createTimesheet',['model'=>$newmodel,'modelDetails'=>$modelDetails]);
+                    }
+                    //Yii::$app->session->setFlash("UpdateMode");
+                    $model=$newmodel;
+                }
+                    
+                foreach($modelDetails as $modelDetail) {
+                        $modelDetail->timesheet_id = $model->id;
+                        $modelDetail->save();
+                }
+                return $this->redirect(['index', 'id' => $model->id]);
+            }
+        }
+ 
+        return $this->render('createTimesheet', [
+            'model' => $model,
+            'modelDetails' => $modelDetails
+        ]);        
         
-        
-        return $this->render('create');
     }
 
     /**
