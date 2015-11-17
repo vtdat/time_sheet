@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "process".
  *
@@ -23,7 +23,12 @@ class Process extends \yii\db\ActiveRecord
     {
         return 'process';
     }
-
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
     /**
      * @inheritdoc
      */

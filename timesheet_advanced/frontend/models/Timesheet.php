@@ -4,7 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use common\models\User;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "timesheet".
  *
@@ -28,6 +28,13 @@ class Timesheet extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'timesheet';
+    }
+    
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 
     /**

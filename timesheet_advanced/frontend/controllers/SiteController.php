@@ -226,6 +226,15 @@ class SiteController extends Controller
 
     public function actionProfile($id)
     {
-        return $this->render('profile', ['model' => User::findModel($id)]);
+        $model = User::findModel($id);
+        if ($model->load(Yii::$app->request->post())){
+            $model->save();
+            return $this->goHome();
+        } else {
+            return $this->render('edit', [
+                'model' => $model,
+            ]);
+        }
+        //return $this->render('edit', ['model' => User::findModel($id)]);
     }
 }
