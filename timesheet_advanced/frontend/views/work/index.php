@@ -24,12 +24,7 @@ $formatter = Yii::$app->formatter;
 ?>
 <div class="work-index container-fluid">
 
-    <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
-
-    <div class="form-group" style="text-align: right; margin-top: 40px;">
-        <?= Html::a('Create',['work/create'],['class' => 'btn btn-primary']) ?>
-        <?= Html::submitButton('Export  <span class="glyphicon glyphicon-save"></span>', ['class' => 'btn btn-success']) ?>
-    </div>
+    <h1 style="text-align: center; margin-bottom: 40px;"><?= Html::encode($this->title) ?></h1>
 
     <?php 
         $gridColumns = [
@@ -57,14 +52,14 @@ $formatter = Yii::$app->formatter;
                 'label' => 'User', 
                 'attribute' => 'user.full_name',
                 'width' => '15em',
-                'group' => true,
-                'subGroupOf' => 0,
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter'=>ArrayHelper::map(User::find()->orderBy('full_name')->asArray()->all(), 'full_name', 'full_name'),
                 'filterWidgetOptions' => [
                     'pluginOptions'=>['allowClear'=>true],
                     'options'=>['placeholder'=> 'Full name'],
                 ],
+                'group' => true,
+                'subGroupOf' => 0,
             ],            
             // WORKTIME column
             [
@@ -165,7 +160,24 @@ $formatter = Yii::$app->formatter;
                 'onclick' => 'window.location.href = "index.php?r=timesheet/view&id="+this.id;'
             ];
         },
+        /*
+        'panel' => [
+            'heading' => '<span class="glyphicon glyphicon-list-alt"></span>',
+            'type' => GridView::TYPE_PRIMARY,
+        ],
+        'toolbar' => [
+            [
+                'content'=>
+                    Html::a('<i class="glyphicon glyphicon-plus"></i> Create', 
+                    ['work/create'],['class'=>'btn btn-success']),
+            ],
+            '{toggleData}',
+            '{export}',
+        ],
+        'export' => [
+            'fontAwesome' => false,
+            'label' => 'Export',
+        ],
+        */
     ]); ?>
-
-
 </div>

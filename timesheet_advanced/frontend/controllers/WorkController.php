@@ -13,6 +13,8 @@ use yii\web\NotFoundHttpException;
 use yii\web\HttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use yii\i18n\Formatter;
+use yii\data\ActiveDataProvider;
 
 
 /**
@@ -53,12 +55,9 @@ class WorkController extends Controller
     {
         $searchModel = new WorkSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        /*
-        $dataProvider = new ActiveDataProvider([
-            'query' => Work::find()->with('timesheet','process','team'),
-        ]);
-        */
-
+        $dataProvider->pagination = [
+            'pageSize' => 10,
+        ];
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -117,6 +116,7 @@ class WorkController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
+
     public function actionCreate($id)
     {   
         $model = new Timesheet(['user_id'=>$id]);
@@ -150,6 +150,7 @@ class WorkController extends Controller
                 if($newmodel==null){
                     Yii::$app->session->setFlash("CreateMode");
                     $model->save();   
+
                 }
                 else{
                     if($newmodel->point !== null){
@@ -159,10 +160,12 @@ class WorkController extends Controller
                     //Yii::$app->session->setFlash("UpdateMode");
                     $model=$newmodel;
                 }
+
                     
                 foreach($modelDetails as $modelDetail) {
                         $modelDetail->timesheet_id = $model->id;
                         $modelDetail->save();
+
                 }
                 return $this->redirect(['index', 'id' => $model->id]);
             }

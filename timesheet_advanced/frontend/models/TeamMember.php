@@ -1,10 +1,15 @@
 <?php
 
+
 namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use frontend\models\Team;
+
+
+use Yii;
+
 
 /**
  * This is the model class for table "team_member".
@@ -28,6 +33,7 @@ class TeamMember extends \yii\db\ActiveRecord
         return 'team_member';
     }
 
+
     public function behaviors()
     {
         return [
@@ -35,13 +41,16 @@ class TeamMember extends \yii\db\ActiveRecord
         ];
     }
     
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
+
             [['team_id', 'user_id'], 'required'],
+
             [['team_id', 'user_id', 'created_at', 'updated_at'], 'integer']
         ];
     }
@@ -75,9 +84,11 @@ class TeamMember extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
     
     public function getTeamName($teamid){
         return Team::findOne(['id'=>$teamid])->team_name;
     }
    
+
 }
