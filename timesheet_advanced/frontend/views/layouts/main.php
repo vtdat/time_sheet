@@ -49,7 +49,7 @@ AppAsset::register($this);
             'linkOptions' => ['data-method' => 'post']
         ];
         $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create']];
-        $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];
+        $menuItemsLeft[] = ['label' => 'List', 'url' => ['/work/']];
 
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],

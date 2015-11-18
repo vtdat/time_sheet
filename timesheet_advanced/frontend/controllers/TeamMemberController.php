@@ -3,16 +3,16 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Process;
-use frontend\models\ProcessSearch;
+use frontend\models\TeamMember;
+use frontend\models\TeamMemberSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ProcessController implements the CRUD actions for Process model.
+ * TeamMemberController implements the CRUD actions for TeamMember model.
  */
-class ProcessController extends Controller
+class TeamMemberController extends Controller
 {
     public function behaviors()
     {
@@ -27,12 +27,12 @@ class ProcessController extends Controller
     }
 
     /**
-     * Lists all Process models.
+     * Lists all TeamMember models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ProcessSearch();
+        $searchModel = new TeamMemberSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class ProcessController extends Controller
     }
 
     /**
-     * Displays a single Process model.
+     * Displays a single TeamMember model.
      * @param integer $id
      * @return mixed
      */
@@ -54,24 +54,16 @@ class ProcessController extends Controller
     }
 
     /**
-     * Creates a new Process model.
+     * Creates a new TeamMember model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Process();
+        $model = new TeamMember();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->created_at = time();
-            $model->updated_at = time();
-            if($model->save()){
-                return $this->redirect(['view', 'id' => $model->id]);                
-            } else {
-                    return $this->render('create', [
-                    'model' => $model,
-                ]);    
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -80,7 +72,7 @@ class ProcessController extends Controller
     }
 
     /**
-     * Updates an existing Process model.
+     * Updates an existing TeamMember model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -90,7 +82,6 @@ class ProcessController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //print_r(Yii::$app->request->post()); exit;
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -100,7 +91,7 @@ class ProcessController extends Controller
     }
 
     /**
-     * Deletes an existing Process model.
+     * Deletes an existing TeamMember model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -113,15 +104,15 @@ class ProcessController extends Controller
     }
 
     /**
-     * Finds the Process model based on its primary key value.
+     * Finds the TeamMember model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Process the loaded model
+     * @return TeamMember the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Process::findOne($id)) !== null) {
+        if (($model = TeamMember::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

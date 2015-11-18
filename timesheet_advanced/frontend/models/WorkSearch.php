@@ -27,6 +27,7 @@ class WorkSearch extends Work
                     'timesheet.point',
                     'timesheet.director_comment',
                     'timesheet.status',
+                    'timesheet.created_at',
                     'user.full_name',
                 ],
                 'safe'
@@ -44,6 +45,7 @@ class WorkSearch extends Work
                 'timesheet.point',
                 'timesheet.director_comment',
                 'timesheet.status',
+                'timesheet.created_at',
                 'user.full_name',
             ]);
         //print_r(parent::attributes()); exit;
@@ -76,7 +78,7 @@ class WorkSearch extends Work
             'sort' => [
                 'defaultOrder' => [
                         'timesheet.date' => SORT_DESC,
-                        //'timesheet.status' => SORT_ASC,
+                        'timesheet.updated_at' => SORT_DESC,
                 ],
                 'attributes' => [
                     'work_time',
@@ -85,7 +87,11 @@ class WorkSearch extends Work
                     'timesheet.date' => [
                         'asc' => ['timesheet.date' => SORT_ASC],
                         'desc' => ['timesheet.date' => SORT_DESC],
-                     ],
+                    ],
+                    'timesheet.updated_at' => [
+                        'asc' => ['timesheet.updated_at' => SORT_ASC],
+                        'desc' => ['timesheet.updated_at' => SORT_DESC],
+                    ],
                     'process.process_name' => [
                         'asc' => ['process.process_name' => SORT_ASC],
                         'desc' => ['process.process_name' => SORT_DESC],
