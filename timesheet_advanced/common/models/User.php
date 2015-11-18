@@ -8,18 +8,26 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * This is the model class for table "user".
  *
  * @property integer $id
  * @property string $username
+ * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
- * @property string $auth_key
  * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $address
+ * @property string $full_name
+ * @property string $telephone
+ * @property integer $role
+ * @property string $birthday
+ * @property string $avatar
+ *
+ * @property TeamMember[] $teamMembers
+ * @property Timesheet[] $timesheets
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -47,12 +55,66 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
+    public $password;
+    public $team;
     public function rules()
     {
         return [
+            [['username', 'email'], 'required'],
+            [['status', 'role'], 'integer'],
+            [['created_at', 'updated_at', 'birthday'], 'safe'],
+            [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
+            [['auth_key'], 'string', 'max' => 32],
+            [['address', 'full_name', 'avatar'], 'string', 'max' => 50],
+            [['telephone'], 'string', 'max' => 20],
+            [['username'], 'unique'],
+            [['email'], 'unique'],
+            [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['password'],'string','min'=>6],
+           
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'address' => 'Address',
+            'full_name' => 'Full Name',
+            'telephone' => 'Telephone',
+            'role' => 'Role',
+            'birthday' => 'Birthday',
+            'avatar' => 'Avatar',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeamMembers()
+    {
+        return $this->hasMany(TeamMember::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTimesheets()
+    {
+        return $this->hasMany(Timesheet::className(), ['user_id' => 'id']);
     }
 
     /**
@@ -184,5 +246,34 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return User the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function findModel($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public static function getUserTeams($id)
+    {
+        // get all team-member relations of user
+        $teams_member = \frontend\models\TeamMember::find()->where(['user_id' => $id])->all();
+        // for each relation...
+        foreach ($teams_member as $team_member) {
+            // ...store team name in an array
+            $user_team[] = \frontend\models\Team::find()->where(['id' => $team_member['team_id']])->one();
+        }
+
+        return $user_team;
     }
 }

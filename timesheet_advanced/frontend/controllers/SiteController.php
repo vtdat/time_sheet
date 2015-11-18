@@ -13,6 +13,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
+use common\models\User;
+
 /**
  * Site controller
  */
@@ -72,7 +74,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect('../web/index.php?r=work');
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -83,7 +96,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect('../web/index.php?r=work');
         }
 
         $model = new LoginForm();
@@ -210,4 +223,20 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionProfile($id)
+    {
+        $model = User::findModel($id);
+        if ($model->load(Yii::$app->request->post())){
+            $model->save();
+            //var_dump($model->team);
+            return $this->goHome();
+        } else {
+            return $this->render('edit', [
+                'model' => $model,
+            ]);
+        }
+        //return $this->render('edit', ['model' => User::findModel($id)]);
+    }
+    
 }
