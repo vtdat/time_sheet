@@ -17,45 +17,33 @@ $formatter = Yii::$app->formatter;
 $this->title = $formatter->asDate($model->date,'medium');
 ?>
 
-<!--
-<div class="timesheet-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'user_id',
-            'point',
-            'director_comment',
-            'date',
-            'status',
-            'created_at',
-            'updated_at',
-        ],
-    ]) ?>
-
-</div>
--->
-
 <div class="timesheet-view container">
     
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
 
-<p><span style="font-weight: bold;">Point: </span></p>
-<p><span style="font-weight: bold;">Director comment: </span></p>
+
+<?php if($model->status == 0) { ?>
+<div class="alert alert-danger">
+    <span class="glyphicon glyphicon-alert">  </span>
+    This timesheet has not been marked yet!
+</div>
+<?php } else { ?>
+<p>
+    <span style="font-weight: bold;">Point: </span>
+    <?= Html::encode($model->point) ?>
+</p>
+<p>
+    <span style="font-weight: bold;">Director comment: </span>
+    <?= Html::encode($model->director_comment) ?>
+</p>
+<?php } 
+
+if(Yii::$app->session->hasFlash('updateOK')) { ?>
+<div class="alert alert-success">
+    Updated successfully!
+</div>
+<?php } ?>
+
 
 <br />
 
@@ -72,6 +60,7 @@ $gridColumns = [
         'value' => function($data) {return $data->work_time.' hour(s)';},
         'mergeHeader' => true,
         'hAlign' => GridView::ALIGN_CENTER,
+        'mergeHeader' => true,
     ],
     // TEAM column
     [
@@ -83,7 +72,7 @@ $gridColumns = [
             'pluginOptions'=>['allowClear'=>true],
                 'options'=>['placeholder'=> 'Team'],
         ],
-
+        'mergeHeader' => true,
     ],
     // PROCESS column
     [
@@ -95,17 +84,19 @@ $gridColumns = [
             'pluginOptions'=>['allowClear'=>true],
             'options'=>['placeholder'=> 'Process'],
         ],
+        'mergeHeader' => true,
     ],
     // WORK_NAME column
     [
         'label' => 'Work Details',
         'attribute' => 'work_name',
-        'mergeHeader' => true,                
+        'mergeHeader' => true,
     ],
     // COMMENT column
     [
         'label' => 'Comment',
         'attribute' => 'comment',
+        'mergeHeader' => true,
     ],
 ];  
 
@@ -117,7 +108,20 @@ $gridColumns = [
     'columns' => $gridColumns,
     'hover' => true,
     'striped' => false,
-
+    'headerRowOptions' => ['style' => 'color: black; background: #eee; border-color: #337ab7;']
 ]); ?>
 
+<?php if($model->user_id === Yii::$app->user->identity->id) { ?>
+    
+<div class="form-group" style="text-align: right;">
+    <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit',
+        'index.php?r=timesheet/update&id='.$model->id,
+        ['class' => $model->status ? 'btn btn-primary disabled' : 'btn btn-primary']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-trash"></span> Delete all',
+        ['\timesheet\delete'],
+        ['class' => $model->status ? 'btn btn-danger disabled' : 'btn btn-danger']) ?>
 </div>
+
+<?php } ?>
+</div>
+

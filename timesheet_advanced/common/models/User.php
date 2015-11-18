@@ -259,4 +259,17 @@ class User extends ActiveRecord implements IdentityInterface
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public static function getUserTeams($id)
+    {
+        // get all team-member relations of user
+        $teams_member = \frontend\models\TeamMember::find()->where(['user_id' => $id])->all();
+        // for each relation...
+        foreach ($teams_member as $team_member) {
+            // ...store team name in an array
+            $user_team[] = \frontend\models\Team::find()->where(['id' => $team_member['team_id']])->one();
+        }
+
+        return $user_team;
+    }
 }

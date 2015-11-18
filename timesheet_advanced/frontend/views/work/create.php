@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 
 use frontend\models\Process;
 use frontend\models\Team;
+use frontend\models\TeamMember;
+use common\models\User;
 
 $this->title = 'Create timesheet';
 
@@ -20,6 +22,12 @@ $form = ActiveForm::begin(['type' => ActiveForm::TYPE_HORIZONTAL]);
 ?>
 
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
+
+<?php if(Yii::$app->session->hasFlash('CreateTimesheetFailed')) { ?>
+<div class="alert alert-danger">
+	Cannot create/update timesheet because it has been marked!
+</div>
+<?php } ?>
 
 <?= Form::widget([
 	'formName' => 'createForm',
@@ -56,7 +64,7 @@ $form = ActiveForm::begin(['type' => ActiveForm::TYPE_HORIZONTAL]);
 			'widgetClass' => '\kartik\widgets\Select2',
 			'options' => [
 				'options' => ['placeholder' => 'Team'],
-				'data' => ArrayHelper::map(Team::find()->orderBy('team_name')->asArray()->all(), 'team_name', 'team_name'),
+				'data' => ArrayHelper::map(User::getUserTeams(Yii::$app->user->identity->id),'team_name','team_name'),
 			],
 		],
 		'work_name' => [

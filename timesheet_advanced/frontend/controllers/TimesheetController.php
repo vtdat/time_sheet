@@ -56,18 +56,7 @@ class TimesheetController extends Controller
         $searchModel = new WorkSearch();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => [
-                'attributes' => [
-                    'process.process_name' => [
-                        'asc' => ['process.process_name' => SORT_ASC],
-                        'desc' => ['process.process_name' => SORT_DESC],
-                    ],
-                    'team.team_name' => [
-                        'asc' => ['team.team_name' => SORT_ASC],
-                        'desc' => ['team.team_name' => SORT_DESC],
-                    ],
-                ],
-            ],
+            'sort' => false,
         ]);
 
         return $this->render('view', [
@@ -114,13 +103,28 @@ class TimesheetController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        $query = Work::find()->where(['timesheet_id' => $model->id]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => false,
+        ]);
+
+        if(Yii::$app->request->post()){
+            $works = Yii::$app->request->post('Work');
+            foreach ($works as $work) {
+                $new_work = Work::findOne($work['id']);
+                $new_work->attributes = $work;
+                $new_work->updated_at = time();
+                if($new_work->update() === false) {
+                    return $this->render('update', ['model' => $model, 'dataProvider' => $dataProvider]);                    
+                }
+            }
+            Yii::$app->session->setFlash('updateOK');
+            return $this->redirect('index.php?r=timesheet/view&id='.$model->id);
         }
+
+        return $this->render('update', ['model' => $model, 'dataProvider' => $dataProvider]);
     }
 
     /**

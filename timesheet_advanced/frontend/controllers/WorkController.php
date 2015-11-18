@@ -14,6 +14,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\i18n\Formatter;
+use yii\data\ActiveDataProvider;
 
 
 /**
@@ -41,12 +42,9 @@ class WorkController extends Controller
     {
         $searchModel = new WorkSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        /*
-        $dataProvider = new ActiveDataProvider([
-            'query' => Work::find()->with('timesheet','process','team'),
-        ]);
-        */
-
+        $dataProvider->pagination = [
+            'pageSize' => 10,
+        ];
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -87,6 +85,10 @@ class WorkController extends Controller
             $availTimesheet = Timesheet::find()
                 ->where(['date' => $date, 'user_id' => Yii::$app->user->identity->id])->one();
             if($availTimesheet) { // timesheet is available
+                if($availTimesheet->status) {
+                    Yii::$app->session->setFlash('CreateTimesheetFailed');
+                    return $this->render('create');
+                }
                 $work->timesheet_id = $availTimesheet->id;
                 $availTimesheet->updated_at = time();
                 if($availTimesheet->update()) {
@@ -109,7 +111,7 @@ class WorkController extends Controller
             {                
                 $process = Process::find()->where(['process_name' => $formAttributes['process_name']])->one();
                 $team = Team::find()->where(['team_name' => $formAttributes['team_name']])->one();
-                
+                                
                 $work->process_id = $process->id;
                 $work->team_id = $team->id;
                 $work->work_time = $formAttributes['work_time'];
