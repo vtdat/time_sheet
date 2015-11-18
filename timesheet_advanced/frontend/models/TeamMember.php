@@ -7,10 +7,6 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use frontend\models\Team;
 
-
-use Yii;
-
-
 /**
  * This is the model class for table "team_member".
  *
