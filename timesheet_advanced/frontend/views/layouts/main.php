@@ -50,7 +50,9 @@ AppAsset::register($this);
         ];
         $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create','id' => Yii::$app->user->identity->id]];
         $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];
-
+        if(Yii::$app->user->identity->role>=1){
+            $menuItemsLeft[] = ['label' => 'Chấm điểm', 'url' => ['/work/chamdiem']];
+        }
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],
             'items' => $menuItemsLeft,

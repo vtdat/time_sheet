@@ -55,6 +55,8 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
+    public $password;
+    public $team;
     public function rules()
     {
         return [
@@ -70,6 +72,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['password'],'string','min'=>6],
+           
         ];
     }
 

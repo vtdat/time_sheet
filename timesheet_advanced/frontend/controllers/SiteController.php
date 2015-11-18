@@ -229,6 +229,7 @@ class SiteController extends Controller
         $model = User::findModel($id);
         if ($model->load(Yii::$app->request->post())){
             $model->save();
+            //var_dump($model->team);
             return $this->goHome();
         } else {
             return $this->render('edit', [
@@ -237,4 +238,5 @@ class SiteController extends Controller
         }
         //return $this->render('edit', ['model' => User::findModel($id)]);
     }
+    
 }

@@ -27,7 +27,8 @@
         "kartik-v/yii2-builder": "@dev",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-datecontrol": "@dev",
-        "tebazil/yii2-db-seeder": "*"
+        "tebazil/yii2-db-seeder": "*",
+	"kartik-v/yii2-editable": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

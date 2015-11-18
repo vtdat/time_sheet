@@ -81,7 +81,8 @@ use frontend\models\Process;
             </div>
             <div class="col-md-2">
                 <?= $form->field($modelDetail, "[$i]process_id" )->dropDownList(
-                    ArrayHelper::map(Process::find()->all(),'id','process_name'),['prompt'=>'Select Process']
+                    ArrayHelper::map(Process::find()->all(),'id','process_name'),
+                    ['prompt'=>'Select Process']
                 )?>
             </div>
             

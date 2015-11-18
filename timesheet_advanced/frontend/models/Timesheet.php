@@ -83,4 +83,13 @@ class Timesheet extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Work::className(), ['timesheet_id' => 'id']);
     }
+    public function findTimesheet($_user_id,$_date){
+        $list=Timesheet::findAll(['user_id'=>$_user_id]);
+        foreach($list as $ts){
+            if($ts->date==$_date){
+                return $ts;
+            }
+        }
+        return null;
+    }
 }

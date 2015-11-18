@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\TeamMember;
+use kartik\date\DatePicker;
 use kartik\select2\Select2;
+use frontend\models\Team;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -14,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
     //$user = Yii::$app->user->identity;
     $user = $model;
+    $data=Team::find()->all();
+    
 ?>
 
 <div class="profile-index">
@@ -30,10 +34,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'placeholder'=>"Nhập họ và tên",
             'value'=>$user->full_name,
         ])?>
-        <?= $form->field($model, 'birthday')->textInput([
-            'placeholder'=>"Nhập ngày tháng năm sinh",
-            'value'=>$user->birthday,
-        ])?>
+        <?= $form->field($model, 'birthday')->widget(
+            DatePicker::className(),[
+                'name' => 'dp_2',
+                'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                'pluginOptions' => [
+                    'autoclose'=>true,
+                    'format' => 'yyyy-mm-dd',
+                ]
+            ]
+        ) ?>
         <?= $form->field($model, 'address')->textInput([
             'placeholder'=>"Nhập địa chỉ",
             'value'=>$user->address,
@@ -45,8 +55,19 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'avatar')->textInput([
             'placeholder'=>"Nhập a",
             'value'=>$user->avatar,
-        ])?>
+        ])?>    
     
+        
+    
+        <?= $form->field($model, 'team')->widget(
+            Select2::classname(), [
+                'data' => ArrayHelper::map(Team::find()->all(),'id','team_name'),
+                'options' => ['placeholder' => 'Select a team ...'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'multiple' => true
+            ],
+        ]);?>
         
        
        

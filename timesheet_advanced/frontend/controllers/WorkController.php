@@ -10,8 +10,9 @@ use frontend\models\Timesheet;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\HttpException;
 use yii\filters\VerbFilter;
-
+use yii\helpers\Json;
 
 
 /**
@@ -22,6 +23,19 @@ class WorkController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+//                'only' => ['create', 'update'],
+                'only' => [],
+                'rules' => [
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // everything else is denied
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -63,6 +77,41 @@ class WorkController extends Controller
         ]);
     }
 
+    public function actionChamdiem(){
+        $this->allowUser(1);
+        $searchModel = new WorkSearch();
+        $dataProvider = $searchModel->chamdiem(Yii::$app->request->queryParams);
+        if (Yii::$app->request->post('hasEditable')){
+            $workId= Yii::$app->request->post('editableKey');
+            $timesheetId=Work::findOne($workId)->timesheet_id;
+            $model = Timesheet::findOne($timesheetId);
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+            
+            $post = current($_POST['Work']);
+            foreach($post as $postname => $value){
+                if($postname=="timesheet.point"){
+                    $model->point=$value;
+                    $model->status=1;
+                }
+                if($postname=="timesheet.director_comment"){
+                    $model->director_comment=$value;
+                }
+            }
+            
+            if($model->validate()){
+                $model->save();
+            }
+            
+            echo $out;
+            return ;
+        }
+
+        return $this->render('chamdiem', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }   
+    
     /**
      * Creates a new Work model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -71,13 +120,18 @@ class WorkController extends Controller
     public function actionCreate($id)
     {   
         $model = new Timesheet(['user_id'=>$id]);
-        $modelDetails = [];
- 
+        $modelDetails = [new Work()];
         $formDetails = Yii::$app->request->post('Work', []);
-        foreach ($formDetails as $formDetail) {
-            $modelDetail = new Work();
-            $modelDetail->setAttributes($formDetail);
-            $modelDetails[] = $modelDetail;
+        foreach ($formDetails as $i=>$formDetail) {
+            if(isset($modelDetails[$i])){
+                $modelDetail = $modelDetails[$i];
+                $modelDetail->setAttributes($formDetail);
+            }
+            else{
+                $modelDetail = new Work();
+                $modelDetail->setAttributes($formDetail);
+                $modelDetails[] = $modelDetail;
+            }
         }
  
         //handling if the addRow button has been pressed
@@ -98,7 +152,7 @@ class WorkController extends Controller
                     $model->save();   
                 }
                 else{
-                    if($newmodel->status == 1){
+                    if($newmodel->point !== null){
                         Yii::$app->session->setFlash("NoModify");
                         return $this->render('createTimesheet',['model'=>$newmodel,'modelDetails'=>$modelDetails]);
                     }
@@ -166,6 +220,13 @@ class WorkController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
+    public function allowUser($level){
+        $cur_level=Yii::$app->user->identity->role;
+        if ($cur_level < $level) {
+            throw new HttpException(403, 'You have no permission to view this content');
         }
     }
 }
