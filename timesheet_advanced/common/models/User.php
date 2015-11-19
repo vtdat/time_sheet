@@ -57,6 +57,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public $password;
     public $team;
+    public $imageFile;
     public function rules()
     {
         return [
@@ -73,7 +74,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['password'],'string','min'=>6],
-           
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg','maxSize' => 1024 * 1024 * 2],
         ];
     }
 
@@ -275,5 +276,15 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return $user_team;
+    }
+    
+    public function upload()
+    {
+        if ($this->validate()) {
+            $this->imageFile->saveAs(Yii::$app->basePath.'/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -14,8 +14,7 @@ use kartik\form\ActiveForm;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
-use app\models\TeamMember;
-use app\models\Team;
+use frontend\models\TeamMember;
 use frontend\models\Process;
 ?>
 
@@ -46,7 +45,7 @@ use frontend\models\Process;
     <?= "<h2>Timesheet Date:</h2>"?>
     
     <?php if(Yii::$app->session->hasFlash("NoModify")) { ?>
-        <div class="alert alert-danger">Timesheet đã được Chấm điểm - Không thể chỉnh sửa</div>
+        <div class="alert alert-danger">Timesheet đã được Chấm điểm - Không thể add thêm</div>
     <?php } ?>
         
     <?= $form->field($model, 'date')->widget(
@@ -64,21 +63,21 @@ use frontend\models\Process;
     <?php foreach ($modelDetails as $i => $modelDetail) : ?>
         <div class="row receipt-detail receipt-detail-<?= $i ?>">
             <div class="col-md-2"><?= 
-            $form->field($modelDetail, "[$i]team_id" )->widget(
+                $form->field($modelDetail, "[$i]team_id" )->widget(
                     Select2::className(), [
                         'theme'=> 'bootstrap',
                         'data' => $teamlist,
-                        'options' => ['placeholder' => 'Select a team ..'],
+                        'options' => ['placeholder' => 'Select team'],
                         'pluginOptions' => [
                                 'allowClear' => true
-                        ],
+                        ], 
                     ]
                 )
-
 //                $form->field($modelDetail, "[$i]team_id" )->dropDownList(
-//                    ArrayHelper::map(Team::find()->all(),'id','team_name'),['prompt'=>'Select Team'])
-            ?>
-            </div>
+//                    $teamlist,
+//                    ['prompt'=>'Select Team']
+//                )
+            ?></div>
             <div class="col-md-2">
                 <?= $form->field($modelDetail, "[$i]process_id" )->dropDownList(
                     ArrayHelper::map(Process::find()->all(),'id','process_name'),
@@ -89,7 +88,6 @@ use frontend\models\Process;
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput()?></div>
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_time" )->textInput()?></div>
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]comment" )->textInput()?></div>
-            
             <div class="col-md-2">
                 <?= Html::button('x', ['class' => 'delete-button btn btn-danger', 'data-target' => "receipt-detail-$i"]) ?>
             </div>
@@ -97,9 +95,9 @@ use frontend\models\Process;
       
     <?php endforeach; ?>
  
-    <div class="form-group row">
-        <div class="col-md-6"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?></div>
+    <div class="form-group row"> 
         <div class="col-md-6"><?= Html::submitButton('Add row', ['name' => 'addRow', 'value' => 'true', 'class' => 'btn btn-info']) ?></div>
+        <div class="col-md-6"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?></div>
     </div>
  
     <?php ActiveForm::end(); ?>

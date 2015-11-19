@@ -1,9 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
 use yii\helpers\ArrayHelper;
-
 use kartik\grid\GridView;
 use kartik\editable\Editable;
 
@@ -122,8 +120,11 @@ $formatter = Yii::$app->formatter;
                 ],
                 'hAlign' => GridView::ALIGN_CENTER,
                 'editableOptions' => [
-                    'header' => 'Chấm điểm',
+                    'header' => 'điểm',
                     'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                    'format'=> Editable::FORMAT_BUTTON,
+                    'valueIfNull'=>'<em style="color:red">Chưa chấm !</em>',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> Chấm ',
                     'options' => [
                         
                     ]
@@ -140,8 +141,14 @@ $formatter = Yii::$app->formatter;
                 'subGroupOf' => 1,
                 'mergeHeader' => true,
                 'editableOptions' => [
-                    'header' => 'Timesheet comment',
-                    'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                    'header' => 'comment',
+                    'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
+                    'valueIfNull'=>'<em style="color:red">Chưa comment !</em>',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> Viết ',
+                    'editableValueOptions'=>[
+                        'style'=>'color: blue',
+                    ],
+                    
                     'options' => [
                         
                     ]

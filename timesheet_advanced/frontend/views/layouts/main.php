@@ -40,6 +40,10 @@ AppAsset::register($this);
         $menuItemsRight[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItemsRight[] = [
+            'label' => 'Profile',
+            'url' => Url::toRoute(['/site/profile2','id' => Yii::$app->user->identity->id])
+        ];
+        $menuItemsRight[] = [
             'label' => Yii::$app->user->identity->username,
             'url' => Url::toRoute(['/site/profile','id' => Yii::$app->user->identity->id])
         ];
@@ -48,13 +52,11 @@ AppAsset::register($this);
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];
-
+        $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];   
         $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create','id' => Yii::$app->user->identity->id]];
-        $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];
         if(Yii::$app->user->identity->role>=1){
             $menuItemsLeft[] = ['label' => 'Chấm điểm', 'url' => ['/work/chamdiem']];
         }
-
 
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],

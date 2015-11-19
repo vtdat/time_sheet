@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use frontend\models\Team;
-use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -20,9 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
     
 ?>
 
-<div class="profile-index">
+<h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
+
+
+<div class="form-group row">
+        <div ><?= Html::submitButton($model->role<1 ? 'User' : 'Admin', ['class' => $model->role<1 ? 'btn btn-default' : 'btn btn-primary']) ?></div>
+</div>
+
     
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+        
         <?= $form->field($model, 'username')->textInput([
             'value'=>$user->username,
             'disabled'=>true,
@@ -52,34 +59,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'placeholder'=>"Nhập số điện thoại",
             'value'=>$user->telephone,
         ])?>
+        <?= $form->field($model, 'imageFile')->fileInput([
+            'placeholder'=>"Upload ảnh",
+        ]) ?>
+
         <?= $form->field($model, 'avatar')->textInput([
             'placeholder'=>"Nhập a",
             'value'=>$user->avatar,
         ])?>    
-    
-        
-    
-        <?= $form->field($model, 'team')->widget(
+   
+        <?= 
+            $form->field($model, 'team')->widget(
             Select2::classname(), [
                 'data' => ArrayHelper::map(Team::find()->all(),'id','team_name'),
                 'options' => ['placeholder' => 'Select a team ...'],
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'multiple' => true
+                    'multiple' => false,
             ],
-        ]);?>
+        ]);
+        ?>
         
-       
-       
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
         </div>
     <?php ActiveForm::end(); ?>
-    
-    
-        
-    
-    
-    
-    
-</div><!-- profile-index -->
