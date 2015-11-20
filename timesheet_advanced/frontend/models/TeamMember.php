@@ -85,6 +85,17 @@ class TeamMember extends \yii\db\ActiveRecord
     public function getTeamName($teamid){
         return Team::findOne(['id'=>$teamid])->team_name;
     }
+    
+    public function getObjectById($teamid,$userid){
+        return TeamMember::findOne(['team_id'=>$teamid,'user_id'=>$userid]);
+    }
    
-
+    public function getTeamListByUser($userid){
+        $teamlist=TeamMember::find()->where(['user_id'=>$userid])->all();
+        $teamid=[];
+        foreach($teamlist as $team){
+            $teamid[]=$team->team_id;
+        }     
+        return $teamid;
+    }
 }

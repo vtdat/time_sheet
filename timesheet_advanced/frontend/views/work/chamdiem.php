@@ -125,8 +125,10 @@ $formatter = Yii::$app->formatter;
                     'format'=> Editable::FORMAT_BUTTON,
                     'valueIfNull'=>'<em style="color:red">Chưa chấm !</em>',
                     'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> Chấm ',
+                    'type'=>'danger',
+                    'placement'=>'left',
                     'options' => [
-                        
+                        'placeholder'=>'Chấm điểm ở đây'
                     ]
                 ],
             ],
@@ -148,25 +150,14 @@ $formatter = Yii::$app->formatter;
                     'editableValueOptions'=>[
                         'style'=>'color: blue',
                     ],
-                    
+                    'type'=>'warning',
+                    'size'=>'lg',
+                    'placement'=>'left',
                     'options' => [
-                        
+                        'placeholder'=>'Viết comment vào đây'
                     ]
                 ],
             ],
-            // STATUS column
-            /*
-            [
-                'attribute' => 'timesheet.status',
-            ],
-            */
-            // ACTION column
-            /*
-            [
-                'class' => 'kartik\grid\ActionColumn',
-
-            ],
-            */
         ];
     ?>
 
@@ -177,6 +168,5 @@ $formatter = Yii::$app->formatter;
         'hover' => TRUE,
         'striped' => FALSE,
     ]); ?>
-
-
+    
 </div>

@@ -20,7 +20,7 @@ use frontend\models\Process;
 
 <?php $this->registerJs("
     $('.delete-button').click(function() {
-        var detail = $(this).closest('.receipt-detail');    
+        var detail = $(this).closest('.work-detail');    
         detail.remove();
     });
 ");
@@ -34,13 +34,16 @@ use frontend\models\Process;
         $teamlist[$team->team_id]=TeamMember::getTeamName($team->team_id);
     }
 ?>
-<div class="receipt-form">
+<div class="work-form">
  
     <?php $form = ActiveForm::begin([
         'enableClientValidation' => false,
         'id' => 'form-login', 
         'type' => ActiveForm::TYPE_INLINE,
-        'fieldConfig' => ['autoPlaceholder'=>true,'showErrors'=>true]
+        'fieldConfig' => [
+            'autoPlaceholder'=>true,
+            'showErrors'=>true,
+        ],
     ]); ?>
     <?= "<h2>Timesheet Date:</h2>"?>
     
@@ -51,7 +54,7 @@ use frontend\models\Process;
     <?= $form->field($model, 'date')->widget(
             DatePicker::className(),[
                 'name' => 'dp_2',
-                'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                'type' => DatePicker::TYPE_INPUT,
                 'pluginOptions' => [
                     'autoclose'=>true,
                     'format' => 'yyyy-mm-dd'
@@ -61,8 +64,8 @@ use frontend\models\Process;
     <?= "<h2>Details</h2>"?>
     
     <?php foreach ($modelDetails as $i => $modelDetail) : ?>
-        <div class="row receipt-detail receipt-detail-<?= $i ?>">
-            <div class="col-md-2"><?= 
+        <div class="row work-detail work-detail-<?= $i ?>">
+            <div class="col-md-2" style="width: auto"><?= 
                 $form->field($modelDetail, "[$i]team_id" )->widget(
                     Select2::className(), [
                         'theme'=> 'bootstrap',
@@ -73,10 +76,6 @@ use frontend\models\Process;
                         ], 
                     ]
                 )
-//                $form->field($modelDetail, "[$i]team_id" )->dropDownList(
-//                    $teamlist,
-//                    ['prompt'=>'Select Team']
-//                )
             ?></div>
             <div class="col-md-2">
                 <?= $form->field($modelDetail, "[$i]process_id" )->dropDownList(
@@ -88,8 +87,8 @@ use frontend\models\Process;
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput()?></div>
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_time" )->textInput()?></div>
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]comment" )->textInput()?></div>
-            <div class="col-md-2">
-                <?= Html::button('x', ['class' => 'delete-button btn btn-danger', 'data-target' => "receipt-detail-$i"]) ?>
+            <div class="col-md-2" style="padding-left: 30px;padding-bottom: 10px">
+                <?= Html::button('x', ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) ?>
             </div>
         </div>
       

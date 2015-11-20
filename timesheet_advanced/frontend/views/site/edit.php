@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use frontend\models\Team;
+use frontend\models\TeamMember;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -14,14 +15,11 @@ $this->title = 'Sửa Profile';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
-    //$user = Yii::$app->user->identity;
     $user = $model;
-    $data=Team::find()->all();
-    
+    $model->team=TeamMember::getTeamListByUser($id);
 ?>
 
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
-
 
 <div class="form-group row">
         <div ><?= Html::submitButton($model->role<1 ? 'User' : 'Admin', ['class' => $model->role<1 ? 'btn btn-default' : 'btn btn-primary']) ?></div>
@@ -67,18 +65,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'placeholder'=>"Nhập a",
             'value'=>$user->avatar,
         ])?>    
-   
+
         <?= 
             $form->field($model, 'team')->widget(
             Select2::classname(), [
                 'data' => ArrayHelper::map(Team::find()->all(),'id','team_name'),
-                'options' => ['placeholder' => 'Select a team ...'],
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'multiple' => false,
-            ],
-        ]);
+                'options' => [
+                    'placeholder' => 'Select a team ...',
+                    'multiple' => true,
+                ],
+                'pluginOptions' => [ 
+                ],
+            ]);
         ?>
+        
         
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>

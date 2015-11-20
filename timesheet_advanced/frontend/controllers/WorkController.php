@@ -89,7 +89,12 @@ class WorkController extends Controller
             foreach($post as $postname => $value){
                 if($postname=="timesheet.point"){
                     $model->point=$value;
-                    $model->status=1;
+                    if ($value != null) {
+                        $model->status = 1;
+                    }
+                    else{
+                        $model->status = 0;
+                    }
                 }
                 if($postname=="timesheet.director_comment"){
                     $model->director_comment=$value;
@@ -118,8 +123,9 @@ class WorkController extends Controller
 
     public function actionCreate($id)
     {   
-        $model = new Timesheet(['user_id'=>$id]);
-        $modelDetails = [new Work()];
+        $model = new Timesheet(['user_id'=>$id,'date'=>date('Y-m-d')]);
+        $modelDetails = [new Work(),new Work(),new Work()];
+        
         $formDetails = Yii::$app->request->post('Work', []);
         foreach ($formDetails as $i=>$formDetail) {
             if(isset($modelDetails[$i])){
@@ -144,27 +150,25 @@ class WorkController extends Controller
         }
  
         if ($model->load(Yii::$app->request->post())) {
-            if (Model::validateMultiple($modelDetails) && $model->validate()) {
+            //if (Model::validateMultiple($modelDetails) && $model->validate()) {
+            if ($model->validate()) {
                 $newmodel=Timesheet::findTimesheet($id,$model->date);
                 if($newmodel==null){
                     Yii::$app->session->setFlash("CreateMode");
                     $model->save();   
-
                 }
                 else{
                     if($newmodel->point !== null){
                         Yii::$app->session->setFlash("NoModify");
                         return $this->render('createTimesheet',['model'=>$newmodel,'modelDetails'=>$modelDetails]);
                     }
-                    //Yii::$app->session->setFlash("UpdateMode");
                     $model=$newmodel;
                 }
-
-                    
                 foreach($modelDetails as $modelDetail) {
-                        $modelDetail->timesheet_id = $model->id;
+                    $modelDetail->timesheet_id = $model->id;
+                    if ($modelDetail->validate()){
                         $modelDetail->save();
-
+                    }
                 }
                 return $this->redirect(['index', 'id' => $model->id]);
             }

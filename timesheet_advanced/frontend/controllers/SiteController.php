@@ -239,15 +239,22 @@ class SiteController extends Controller
 //                $model->upload();
 //                $model->avatar=$model->imageFile->getBaseName();
 //            }
+            $model->addTeam();
             $model->save();
-            //var_dump($model->team);
             return $this->goHome();
         } else {
             return $this->render('edit', [
                 'model' => $model,
+                'id' => $id,
             ]);
         }
         //return $this->render('edit', ['model' => User::findModel($id)]);
     }
     
+    private function allowUser($level){
+        $cur_level=Yii::$app->user->identity->role;
+        if ($cur_level < $level) {
+            throw new HttpException(403, 'You have no permission to view this content');
+        }
+    }
 }
