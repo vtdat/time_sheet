@@ -26,7 +26,6 @@ class WorkController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-//                'only' => ['create', 'update'],
                 'only' => [],
                 'rules' => [
                     // allow authenticated users
@@ -76,7 +75,7 @@ class WorkController extends Controller
     }
 
     public function actionChamdiem(){
-        $this->allowUser(1);
+        $this->allowUser(2);
         $searchModel = new WorkSearch();
         $dataProvider = $searchModel->chamdiem(Yii::$app->request->queryParams);
         if (Yii::$app->request->post('hasEditable')){
@@ -121,8 +120,9 @@ class WorkController extends Controller
      * @return mixed
      */
 
-    public function actionCreate($id)
+    public function actionCreate()
     {   
+        $id=Yii::$app->user->identity->id;
         $model = new Timesheet(['user_id'=>$id,'date'=>date('Y-m-d')]);
         $modelDetails = [new Work(),new Work(),new Work()];
         
@@ -154,8 +154,15 @@ class WorkController extends Controller
             if ($model->validate()) {
                 $newmodel=Timesheet::findTimesheet($id,$model->date);
                 if($newmodel==null){
-                    Yii::$app->session->setFlash("CreateMode");
-                    $model->save();   
+                    if ( strtotime($model->date) > strtotime(date('Y-m-d')) ){
+                        Yii::$app->session->setFlash("WrongDate");
+                        $model->date=date('Y-m-d');
+                        return $this->render('createTimesheet',['model'=>$model,'modelDetails'=>$modelDetails]);
+                    }
+                    else{
+                        Yii::$app->session->setFlash("CreateMode");
+                        $model->save();  
+                    }    
                 }
                 else{
                     if($newmodel->point !== null){

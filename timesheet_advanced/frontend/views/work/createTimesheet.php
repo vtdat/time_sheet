@@ -51,6 +51,10 @@ use frontend\models\Process;
         <div class="alert alert-danger">Timesheet đã được Chấm điểm - Không thể add thêm</div>
     <?php } ?>
         
+    <?php if(Yii::$app->session->hasFlash("WrongDate")) { ?>
+        <div class="alert alert-danger">Bạn không thể tạo timesheet cho ngày hôm sau</div>
+    <?php } ?> 
+        
     <?= $form->field($model, 'date')->widget(
             DatePicker::className(),[
                 'name' => 'dp_2',

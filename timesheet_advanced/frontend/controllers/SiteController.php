@@ -230,9 +230,9 @@ class SiteController extends Controller
         return $this->render('profile', ['model' => User::findModel($id)]);
     }
     
-    public function actionProfile2($id)
+    public function actionProfile2()
     {
-        $model = User::findModel($id);
+        $model = User::findModel(Yii::$app->user->identity->id);
         if ($model->load(Yii::$app->request->post())){
 //            if (Yii::$app->request->isPost) {
 //                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -245,16 +245,9 @@ class SiteController extends Controller
         } else {
             return $this->render('edit', [
                 'model' => $model,
-                'id' => $id,
+                'id' => Yii::$app->user->identity->id,
             ]);
         }
         //return $this->render('edit', ['model' => User::findModel($id)]);
-    }
-    
-    private function allowUser($level){
-        $cur_level=Yii::$app->user->identity->role;
-        if ($cur_level < $level) {
-            throw new HttpException(403, 'You have no permission to view this content');
-        }
     }
 }

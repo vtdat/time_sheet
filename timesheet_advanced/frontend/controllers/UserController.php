@@ -7,6 +7,7 @@ use common\models\User;
 use common\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\HttpException;
 use yii\filters\VerbFilter;
 
 /**
@@ -17,6 +18,18 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => [],
+                'rules' => [
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // everything else is denied
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -116,6 +129,15 @@ class UserController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    public function beforeAction(){
+        $cur_level=Yii::$app->user->identity->role;
+        if ($cur_level < 1) {
+            throw new HttpException(403, 'You have no permission to view this content');
+        }
+        else{
+            return $this;
         }
     }
 }

@@ -294,7 +294,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function addTeam(){
         $addlist=[];
         $dellist=[];
-        $teamlist=TeamMember::find(['user_id'=>$this->id])->all();
+        $teamlist=TeamMember::find()->where(['user_id'=>$this->id])->all();
         foreach ($teamlist as $oldteam){
             $flag=0;
             foreach($this->team as $i){
