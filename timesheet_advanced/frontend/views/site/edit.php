@@ -20,14 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
-
-<div class="form-group row">
-        <div ><?= Html::submitButton($model->role<1 ? 'User' : 'Admin', ['class' => $model->role<1 ? 'btn btn-default' : 'btn btn-primary']) ?></div>
-</div>
-
-    
+ 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-        
+        <?= Html::Button('User', ['class' => 'btn btn-default']) ?>
+        <?= Html::Button('Admin', ['class' => 'btn btn-success']) ?>
+        <?= Html::Button('Director', ['class' => 'btn btn-danger']) ?>
+
         <?= $form->field($model, 'username')->textInput([
             'value'=>$user->username,
             'disabled'=>true,

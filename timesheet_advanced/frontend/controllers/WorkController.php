@@ -82,13 +82,16 @@ class WorkController extends Controller
             $workId= Yii::$app->request->post('editableKey');
             $timesheetId=Work::findOne($workId)->timesheet_id;
             $model = Timesheet::findOne($timesheetId);
-            $out = Json::encode(['output'=>'', 'message'=>'']);
-            
             $post = current($_POST['Work']);
+            $error=Json::encode(['output'=>'', 'message'=>'Validate error']);
             foreach($post as $postname => $value){
                 if($postname=="timesheet.point"){
+                    
                     $model->point=$value;
                     if ($value != null) {
+                        if(($value<0)||($value>2)){ 
+                            return Json::encode(['output'=>'', 'message'=>'chỉ được nhập từ 0 đến 2']);
+                        }   
                         $model->status = 1;
                     }
                     else{
@@ -103,10 +106,12 @@ class WorkController extends Controller
             if($model->validate()){
                 $model->save();
             }
-            
-            echo $out;
-            return ;
+            else{
+                return $error;
+            }
+            return Json::encode(['output'=>'', 'message'=>'']);
         }
+        
 
         return $this->render('chamdiem', [
             'searchModel' => $searchModel,

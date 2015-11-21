@@ -75,8 +75,18 @@ class UserController extends Controller
     {
         $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->setPassword($model->password);
+            $model->generateAuthKey();
+            if($model->validate()){
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                return $this->render('create', [
+                'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,

@@ -41,7 +41,7 @@ AppAsset::register($this);
     } else {
         
         $menuItemsRight[] = [
-            'label' => 'Profile',
+            'label' => Yii::$app->user->identity->full_name,
             'url' => Url::toRoute(['/site/profile2'])
         ];
         $menuItemsRight[] = [
@@ -58,7 +58,7 @@ AppAsset::register($this);
         if(Yii::$app->user->identity->role>=2){
             $menuItemsLeft[] = ['label' => 'Chấm điểm', 'url' => ['/work/chamdiem']];
         }
-
+        $menuItemsLeft[] = ['label' => 'Thống kê', 'url' => ['/work/']];
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],
             'items' => $menuItemsLeft,

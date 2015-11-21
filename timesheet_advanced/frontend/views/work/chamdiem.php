@@ -121,14 +121,14 @@ $formatter = Yii::$app->formatter;
                 'hAlign' => GridView::ALIGN_CENTER,
                 'editableOptions' => [
                     'header' => 'điểm',
-                    'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                    'inputType' => Editable::INPUT_TEXT,
                     'format'=> Editable::FORMAT_BUTTON,
                     'valueIfNull'=>'<em style="color:red">Chưa chấm !</em>',
                     'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> Chấm ',
                     'type'=>'danger',
                     'placement'=>'left',
                     'options' => [
-                        'placeholder'=>'Chấm điểm ở đây'
+                        'placeholder'=>'Chấm điểm ở đây',
                     ]
                 ],
             ],
@@ -143,6 +143,8 @@ $formatter = Yii::$app->formatter;
                 'subGroupOf' => 1,
                 'mergeHeader' => true,
                 'editableOptions' => [
+                    'submitOnEnter'=>false,
+                    'asPopover'=>true,
                     'header' => 'comment',
                     'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
                     'valueIfNull'=>'<em style="color:red">Chưa comment !</em>',

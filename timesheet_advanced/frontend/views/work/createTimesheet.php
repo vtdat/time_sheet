@@ -87,10 +87,9 @@ use frontend\models\Process;
                     ['prompt'=>'Select Process']
                 )?>
             </div>
-            
-            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput()?></div>
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_time" )->textInput()?></div>
-            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]comment" )->textInput()?></div>
+            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput()?></div>
+            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]comment" )->textarea(['rows'=>1])?></div>
             <div class="col-md-2" style="padding-left: 30px;padding-bottom: 10px">
                 <?= Html::button('x', ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) ?>
             </div>

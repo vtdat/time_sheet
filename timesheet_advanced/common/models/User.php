@@ -69,13 +69,16 @@ class User extends ActiveRecord implements IdentityInterface
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['address', 'full_name', 'avatar'], 'string', 'max' => 50],
+            [['full_name'], 'required'],
             [['telephone'], 'string', 'max' => 20],
-            [['username'], 'unique'],
-            [['email'], 'unique'],
+            ['username', 'unique','message' => 'This username  has already been taken.'],
+            ['email', 'unique','message' => 'This email address has already been taken.'],
+            [['email'], 'email'],
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['password'],'string','min'=>6],
+            [['password'], 'required'],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg','maxSize' => 1024 * 1024 * 2],
             [['team'],'safe'],
         ];
@@ -102,6 +105,7 @@ class User extends ActiveRecord implements IdentityInterface
             'role' => 'Role',
             'birthday' => 'Birthday',
             'avatar' => 'Avatar',
+            'team' => 'Đăng ký team của bạn: ',
         ];
     }
 

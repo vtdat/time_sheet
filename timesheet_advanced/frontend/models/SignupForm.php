@@ -25,7 +25,8 @@ class SignupForm extends Model
     {
         return [
             [['birthday'], 'safe'],
-            [['address', 'full_name'], 'string', 'max' => 50],
+            [['address','full_name'], 'string', 'max' => 50],
+            ['full_name', 'required'],
             [['telephone'], 'string', 'max' => 20],
             ['username', 'filter', 'filter' => 'trim'],
 
