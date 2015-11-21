@@ -7,6 +7,8 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+use frontend\models\TeamMember;
+
 /**
  * This is the model class for table "user".
  *
@@ -57,6 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public $password;
     public $team;
+    public $imageFile;
     public function rules()
     {
         return [
@@ -73,7 +76,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['password'],'string','min'=>6],
-           
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg','maxSize' => 1024 * 1024 * 2],
+            [['team'],'safe'],
         ];
     }
 
@@ -275,5 +279,47 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return $user_team;
+    }
+    
+    public function upload()
+    {
+        if ($this->validate()) {
+            $this->imageFile->saveAs(Yii::$app->basePath.'/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function addTeam(){
+        $addlist=[];
+        $dellist=[];
+        $teamlist=TeamMember::find()->where(['user_id'=>$this->id])->all();
+        foreach ($teamlist as $oldteam){
+            $flag=0;
+            foreach($this->team as $i){
+                if($oldteam->team_id==$i) $flag=1;
+            }
+            if($flag==0){
+                $dellist[]=$oldteam->team_id;
+            }
+        }
+        foreach ($this->team as $newindex){
+            $flag=0;
+            foreach($teamlist as $oldteam){
+                if($oldteam->team_id==$newindex) $flag=1;
+            }
+            if($flag==0){
+                $addlist[]=$newindex;
+            }
+        }
+        foreach($addlist as $addindex){
+            $newteam = new TeamMember(['team_id'=>$addindex,'user_id'=>$this->id]);
+            $newteam->save();
+        }
+        foreach($dellist as $delindex){
+            $deltarget=TeamMember::getObjectById($delindex,$this->id);
+            $deltarget->delete();
+        }
     }
 }

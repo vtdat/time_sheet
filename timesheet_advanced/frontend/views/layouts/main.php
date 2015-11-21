@@ -39,6 +39,11 @@ AppAsset::register($this);
         $menuItemsRight[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItemsRight[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+        
+        $menuItemsRight[] = [
+            'label' => 'Profile',
+            'url' => Url::toRoute(['/site/profile2'])
+        ];
         $menuItemsRight[] = [
             'label' => Yii::$app->user->identity->username,
             'url' => Url::toRoute(['/site/profile','id' => Yii::$app->user->identity->id])
@@ -48,23 +53,36 @@ AppAsset::register($this);
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];
-
-        $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create','id' => Yii::$app->user->identity->id]];
-        $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];
-        if(Yii::$app->user->identity->role>=1){
+        $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];   
+        $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create']];
+        if(Yii::$app->user->identity->role>=2){
             $menuItemsLeft[] = ['label' => 'Chấm điểm', 'url' => ['/work/chamdiem']];
         }
-
 
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],
             'items' => $menuItemsLeft,
         ]);
+       
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItemsRight,
     ]);
+    
+    if(!Yii::$app->user->isGuest && Yii::$app->user->identity->role>=1){
+            echo Nav::widget([
+                'options' => ['class' => 'navbar-nav navbar-right'],
+                'items' => [
+                    ['label' => 'Manager', 'items' => [
+                        ['label' => 'User manager', 'url' => ['/user/']],
+                        ['label' => 'Team manager', 'url' => ['/team/']],
+                        ['label' => 'Process manager', 'url' => ['/process/']],
+                    ]],
+                ],
+            ]);
+    }
+    
     NavBar::end();
     ?>
 

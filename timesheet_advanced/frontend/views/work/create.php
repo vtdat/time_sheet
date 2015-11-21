@@ -9,9 +9,6 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
 use frontend\models\Process;
-
-use app\models\TeamMember;
-=======
 use frontend\models\Team;
 use frontend\models\TeamMember;
 use common\models\User;

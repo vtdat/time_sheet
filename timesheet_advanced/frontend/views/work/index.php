@@ -160,16 +160,16 @@ $formatter = Yii::$app->formatter;
                 'onclick' => 'window.location.href = "index.php?r=timesheet/view&id="+this.id;'
             ];
         },
-        /*
+        
         'panel' => [
             'heading' => '<span class="glyphicon glyphicon-list-alt"></span>',
-            'type' => GridView::TYPE_PRIMARY,
+            'type' => GridView::TYPE_DEFAULT,
         ],
         'toolbar' => [
             [
                 'content'=>
                     Html::a('<i class="glyphicon glyphicon-plus"></i> Create', 
-                    ['work/create'],['class'=>'btn btn-success']),
+                    ['work/create2','id' => Yii::$app->user->identity->id],['class'=>'btn btn-success']),
             ],
             '{toggleData}',
             '{export}',
@@ -178,6 +178,6 @@ $formatter = Yii::$app->formatter;
             'fontAwesome' => false,
             'label' => 'Export',
         ],
-        */
+        
     ]); ?>
 </div>

@@ -29,6 +29,9 @@ $this->title = $formatter->asDate($model->date,'medium');
 </div>
 <?php } else { ?>
 <p>
+    <div class="alert alert-success">
+        Timesheet đã được chấm điểm
+    </div>
     <span style="font-weight: bold;">Point: </span>
     <?= Html::encode($model->point) ?>
 </p>
