@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'address',
              'full_name',
             // 'telephone',
-             'role',
+            'role',
             // 'birthday',
             // 'avatar',
 

@@ -159,7 +159,7 @@ class WorkController extends Controller
             if ($model->validate()) {
                 $newmodel=Timesheet::findTimesheet($id,$model->date);
                 if($newmodel==null){
-                    if ( strtotime($model->date) > strtotime(date('Y-m-d')) ){
+                    if (\strtotime($model->date) > \strtotime(\date('Y-m-d')) ){
                         Yii::$app->session->setFlash("WrongDate");
                         $model->date=date('Y-m-d');
                         return $this->render('createTimesheet',['model'=>$model,'modelDetails'=>$modelDetails]);

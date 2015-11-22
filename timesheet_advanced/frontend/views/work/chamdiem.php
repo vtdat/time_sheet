@@ -17,12 +17,9 @@ use frontend\models\Team;
 $this->title = 'Chấm điểm timesheet';
 $this->params['breadcrumbs'][] = $this->title;
 
-$formatter = Yii::$app->formatter;
 ?>
 <div class="work-index container-fluid">
-
     <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
-
     <?php 
         $gridColumns = [
             // DATE column
@@ -129,7 +126,7 @@ $formatter = Yii::$app->formatter;
                     'placement'=>'left',
                     'options' => [
                         'placeholder'=>'Chấm điểm ở đây',
-                    ]
+                    ],
                 ],
             ],
             // DRECTOR COMMENT column

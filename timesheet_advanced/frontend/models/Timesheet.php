@@ -93,5 +93,4 @@ class Timesheet extends \yii\db\ActiveRecord
         }
         return null;
     }
-    
 }
