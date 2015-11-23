@@ -233,12 +233,14 @@ class SiteController extends Controller
     public function actionProfile2()
     {
         $model = User::findModel(Yii::$app->user->identity->id);
-        if ($model->load(Yii::$app->request->post())){
-//            if (Yii::$app->request->isPost) {
+        if ($model->load(Yii::$app->request->post()) && ($model->validatePassword($model->password))){
+            
 //                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-//                $model->upload();
+//                if($model->upload()){
+//                    return;
+//                }
 //                $model->avatar=$model->imageFile->getBaseName();
-//            }
+            
             $model->addTeam();
             $model->save();
             return $this->goHome();

@@ -20,12 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
- 
+<div class="container row">
+    
+    <div class="col-md-3">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-        <?= Html::Button('User', ['class' => 'btn btn-default']) ?>
-        <?= Html::Button('Admin', ['class' => 'btn btn-success']) ?>
-        <?= Html::Button('Director', ['class' => 'btn btn-danger']) ?>
-
+        <?= Html::Button($model->role==0?'User':$model->role==1?'Admin':'Director', ['class' => $model->role==0?'btn btn-default':$model->role==1?'btn btn-success':'btn btn-danger']) ?>
         <?= $form->field($model, 'username')->textInput([
             'value'=>$user->username,
             'disabled'=>true,
@@ -76,9 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]);
         ?>
-        
+        <?= $form->field($model, 'password')->passwordInput([
+            'placeholder'=>"Xác thực mật khẩu",
+        ])?>
         
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
         </div>
     <?php ActiveForm::end(); ?>
+    </div>
+</div>

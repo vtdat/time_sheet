@@ -121,8 +121,13 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model=$this->findModel($id);
+        if($model->role>1){
+            Yii::$app->session->setFlash("NoDeleteRoot");
+        }
+        else{
+            $model->delete();
+        }
         return $this->redirect(['index']);
     }
 

@@ -7,6 +7,7 @@ use frontend\models\WorkSearch;
 use frontend\models\Timesheet;
 use frontend\models\Process;
 use frontend\models\Team;
+use frontend\models\CreateTimesheetForm;
 
 use yii\base\Model;
 use Yii;
@@ -86,9 +87,8 @@ class WorkController extends Controller
             $error=Json::encode(['output'=>'', 'message'=>'Validate error']);
             foreach($post as $postname => $value){
                 if($postname=="timesheet.point"){
-                    
                     $model->point=$value;
-                    if ($value != null) {
+                    if ($value !== null) {
                         if(($value<0)||($value>2)){ 
                             return Json::encode(['output'=>'', 'message'=>'chỉ được nhập từ 0 đến 2']);
                         }   
@@ -304,4 +304,5 @@ class WorkController extends Controller
             throw new HttpException(403, 'You have no permission to view this content');
         }
     }
+    
 }

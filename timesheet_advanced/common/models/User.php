@@ -284,11 +284,12 @@ class User extends ActiveRecord implements IdentityInterface
 
         return $user_team;
     }
-    
+   
     public function upload()
     {
         if ($this->validate()) {
-            $this->imageFile->saveAs(Yii::$app->basePath.'/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            if($this->imageFile==null) return false;
+            $this->imageFile->saveAs('/uploads/' . $this->username . '.' . $this->imageFile->extension);
             return true;
         } else {
             return false;

@@ -463,16 +463,16 @@
         },
         {
             "name": "kartik-v/bootstrap-star-rating",
-            "version": "v3.5.4",
+            "version": "v3.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-star-rating.git",
-                "reference": "987777ee21a599bebbc545c743063fcee9833842"
+                "reference": "0f729ea50a69224b643e2d9c955b9183e387f03a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-star-rating/zipball/987777ee21a599bebbc545c743063fcee9833842",
-                "reference": "987777ee21a599bebbc545c743063fcee9833842",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-star-rating/zipball/0f729ea50a69224b643e2d9c955b9183e387f03a",
+                "reference": "0f729ea50a69224b643e2d9c955b9183e387f03a",
                 "shasum": ""
             },
             "type": "library",
@@ -500,7 +500,7 @@
                 "jquery",
                 "star"
             ],
-            "time": "2015-09-21 09:06:33"
+            "time": "2015-11-22 17:08:34"
         },
         {
             "name": "kartik-v/dependent-dropdown",
@@ -921,16 +921,16 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v1.7.7",
+            "version": "v1.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19"
+                "reference": "f90b9ff515ced4e40ff5ec8156a5c9f7f51e2a7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19",
-                "reference": "c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/f90b9ff515ced4e40ff5ec8156a5c9f7f51e2a7f",
+                "reference": "f90b9ff515ced4e40ff5ec8156a5c9f7f51e2a7f",
                 "shasum": ""
             },
             "require": {
@@ -963,7 +963,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-06-16 05:19:57"
+            "time": "2015-11-22 06:35:23"
         },
         {
             "name": "kartik-v/yii2-mpdf",
@@ -1255,16 +1255,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-colorinput",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-colorinput.git",
-                "reference": "1f3e3dc32a7dae0c83623fbda8e0dd77b84771b1"
+                "reference": "c00c3fc46a63a738b038366febc08a21112ff9f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-colorinput/zipball/1f3e3dc32a7dae0c83623fbda8e0dd77b84771b1",
-                "reference": "1f3e3dc32a7dae0c83623fbda8e0dd77b84771b1",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-colorinput/zipball/c00c3fc46a63a738b038366febc08a21112ff9f2",
+                "reference": "c00c3fc46a63a738b038366febc08a21112ff9f2",
                 "shasum": ""
             },
             "require": {
@@ -1300,7 +1300,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2014-11-08 21:10:18"
+            "time": "2015-11-22 06:32:23"
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
@@ -1550,16 +1550,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-rangeinput",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-rangeinput.git",
-                "reference": "b7a0b1eb627a3d6d99bad3d8ff31b28259f9e987"
+                "reference": "ad82cf956b95555d39dbb534587c7827b1dc7bdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-rangeinput/zipball/b7a0b1eb627a3d6d99bad3d8ff31b28259f9e987",
-                "reference": "b7a0b1eb627a3d6d99bad3d8ff31b28259f9e987",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-rangeinput/zipball/ad82cf956b95555d39dbb534587c7827b1dc7bdf",
+                "reference": "ad82cf956b95555d39dbb534587c7827b1dc7bdf",
                 "shasum": ""
             },
             "require": {
@@ -1595,7 +1595,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2014-11-08 21:15:27"
+            "time": "2015-11-22 06:52:44"
         },
         {
             "name": "kartik-v/yii2-widget-rating",

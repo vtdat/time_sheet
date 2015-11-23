@@ -45,10 +45,6 @@ class CreateTimesheetForm extends Model
             'comment' => 'Comment',
         ];
     }
-    public function create(){
-        $id=Yii::$app->user->identity->id;
-        $timesheet=Timesheet::findTimesheet($id,$model->date);
-       
-    }
+    
 }
 ?>

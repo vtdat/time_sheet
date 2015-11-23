@@ -9,6 +9,7 @@ use frontend\models\Work;
 use frontend\models\WorkSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\HttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 
@@ -112,9 +113,14 @@ class TimesheetController extends Controller
      * @return mixed
      */
     public function actionUpdate($id)
-    {
+    { 
         $model = $this->findModel($id);
-
+        if(Yii::$app->user->identity->id!==$model->user_id){
+            throw new HttpException(403, 'You have no permission to view this content');
+        }
+        if($model->status){
+            throw new HttpException(400, 'You cannot edit this timesheet');
+        }
         $query = Work::find()->where(['timesheet_id' => $model->id]);
 
         $dataProvider = new ActiveDataProvider([
