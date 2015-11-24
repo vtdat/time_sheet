@@ -28,6 +28,3 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
-
-# ignore image upload folder
-uploads/
