@@ -226,8 +226,9 @@ class SiteController extends Controller
         ]);
     }
     
-    public function actionProfile($id)
+    public function actionProfile()
     {
+        $id=Yii::$app->user->identity->id;
         return $this->render('profile', ['model' => User::findModel($id)]);
     }
     
@@ -242,7 +243,7 @@ class SiteController extends Controller
                 $model->upload();
                 $model->addTeam();
                 $model->save();
-                return $this->goHome();
+                return $this->render('profile', ['model' => $model]);
             } else {
                 return $this->render('edit', [
                     'model' => $model,
@@ -251,5 +252,8 @@ class SiteController extends Controller
             }
             //return $this->render('edit', ['model' => User::findModel($id)]);
         }
+    }
+    public function actionPoint(){
+        return $this->render('point');
     }
 }

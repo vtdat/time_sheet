@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 use frontend\models\TeamMember;
-
+use frontend\models\Timesheet;
 /**
  * This is the model class for table "user".
  *
@@ -80,7 +80,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['password'],'string','min'=>6],
             [['password'], 'required'],
             [['team'],'safe'],
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false,'maxSize' => 1024 * 1024 * 2],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, gif', 'checkExtensionByMimeType'=>false,'maxSize' => 1024 * 1024 * 2],
         ];
     }
 
@@ -286,6 +286,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
     
     public function addTeam(){
+        if ($this->team == null) {
+            return;
+        }
         $addlist=[];
         $dellist=[];
         $teamlist=TeamMember::find()->where(['user_id'=>$this->id])->all();
@@ -327,4 +330,23 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
     }
+    
+    public function calPoint($userid,$date){
+        $timesheets=Timesheet::find()->where(['user_id'=>$userid])->all();
+        $first=date('Y-m-01',strtotime($date));
+        $last=date('Y-m-t',strtotime($date));
+        $count=0;
+        $sumpoint=0;
+        foreach ($timesheets as $timesheet){
+            if(strtotime($timesheet->date)>=strtotime($first) && strtotime($timesheet->date)<=strtotime($last)){
+                if($timesheet->status){
+                    $count++;
+                    $sumpoint+=$timesheet->point;
+                }
+            }
+        }
+        if ($count == 0) return 0;
+        return $sumpoint/$count;
+    }
+    
 }

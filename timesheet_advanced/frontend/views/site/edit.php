@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <br/>
     <div class="col-md-3">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-        <?= Html::Button($model->role==0?'User':$model->role==1?'Admin':'Director', ['class' => $model->role==0?'btn btn-default':$model->role==1?'btn btn-success':'btn btn-danger']) ?>
+        <?= Html::Button($model->role==0?'User':($model->role==1?'Admin':'Director'), ['class' => $model->role==0?'btn btn-default':($model->role==1?'btn btn-success':'btn btn-danger')]) ?>
         <?= $form->field($model, 'username')->textInput([
             'value'=>$user->username,
             'disabled'=>true,
@@ -54,8 +54,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'placeholder'=>"Nhập số điện thoại",
             'value'=>$user->telephone,
         ])?>
-        <?= $form->field($model, 'imageFile')->fileInput() ?>
-
+        <?php
+        if($model->avatar==null) {
+            echo $form->field($model, 'imageFile')->fileInput() ;
+        } 
+        ?>
         <?= 
             $form->field($model, 'team')->widget(
             Select2::classname(), [

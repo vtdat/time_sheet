@@ -16,6 +16,7 @@ use kartik\select2\Select2;
 
 use frontend\models\TeamMember;
 use frontend\models\Process;
+use common\models\User;
 ?>
 
 <?php $this->registerJs("
@@ -34,6 +35,7 @@ use frontend\models\Process;
         $teamlist[$team->team_id]=TeamMember::getTeamName($team->team_id);
     }
 ?>
+<?="Điểm trung bình tháng ".date('m')." của bạn là: ".User::calPoint($userid,date('Y-m-d'))?>
 <div class="work-form">
  
     <?php $form = ActiveForm::begin([

@@ -41,7 +41,7 @@ AppAsset::register($this);
     } else {
         $menuItemsRight[] = [
             'label' => Yii::$app->user->identity->username,
-            'url' => Url::toRoute(['/site/profile','id' => Yii::$app->user->identity->id])
+            'url' => Url::toRoute(['/site/profile'])
         ];
         $menuItemsRight[] = [
             'label' => 'Logout',
@@ -53,7 +53,7 @@ AppAsset::register($this);
         if(Yii::$app->user->identity->role>=2){
             $menuItemsLeft[] = ['label' => 'Chấm điểm', 'url' => ['/work/chamdiem']];
         }
-        $menuItemsLeft[] = ['label' => 'Thống kê', 'url' => ['/work/']];
+        $menuItemsLeft[] = ['label' => 'Thống kê', 'url' => ['/site/point']];
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],
             'items' => $menuItemsLeft,
