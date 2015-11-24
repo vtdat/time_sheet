@@ -284,20 +284,6 @@ class User extends ActiveRecord implements IdentityInterface
 
         return $user_team;
     }
-<<<<<<< HEAD
-   
-    public function upload()
-    {
-        if ($this->validate()) {
-            if($this->imageFile==null) return false;
-            $this->imageFile->saveAs('/uploads/' . $this->username . '.' . $this->imageFile->extension);
-            return true;
-        } else {
-            return false;
-        }
-    }
-=======
->>>>>>> develop
     
     public function addTeam(){
         $addlist=[];
