@@ -39,11 +39,6 @@ AppAsset::register($this);
         $menuItemsRight[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItemsRight[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-        
-        $menuItemsRight[] = [
-            'label' => Yii::$app->user->identity->full_name,
-            'url' => Url::toRoute(['/site/profile2'])
-        ];
         $menuItemsRight[] = [
             'label' => Yii::$app->user->identity->username,
             'url' => Url::toRoute(['/site/profile','id' => Yii::$app->user->identity->id])

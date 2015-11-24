@@ -16,6 +16,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 
+
 /**
  * Site controller
  */
@@ -230,26 +231,25 @@ class SiteController extends Controller
         return $this->render('profile', ['model' => User::findModel($id)]);
     }
     
-    public function actionProfile2()
+    public function actionEdit()
     {
-        $model = User::findModel(Yii::$app->user->identity->id);
-        if ($model->load(Yii::$app->request->post()) && ($model->validatePassword($model->password))){
-            
-//                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-//                if($model->upload()){
-//                    return;
-//                }
-//                $model->avatar=$model->imageFile->getBaseName();
-            
-            $model->addTeam();
-            $model->save();
-            return $this->goHome();
+        if(Yii::$app->user->isGuest) {
+            return $this->redirect('index.php');
         } else {
-            return $this->render('edit', [
-                'model' => $model,
-                'id' => Yii::$app->user->identity->id,
-            ]);
+            $model = User::findModel(Yii::$app->user->identity->id);
+            if ($model->load(Yii::$app->request->post())){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+                $model->addTeam();
+                $model->save();
+                return $this->goHome();
+            } else {
+                return $this->render('edit', [
+                    'model' => $model,
+                    'id' => Yii::$app->user->identity->id,
+                ]);
+            }
+            //return $this->render('edit', ['model' => User::findModel($id)]);
         }
-        //return $this->render('edit', ['model' => User::findModel($id)]);
     }
 }

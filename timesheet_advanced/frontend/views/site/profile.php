@@ -20,19 +20,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
 
-<div class="col-md-3 col-md-offset-2" style="border: 1px solid gray;">
-    avatar
+<div class="col-md-3 col-md-offset-2">
+    <?php echo Html::img('../uploads/' . $model->avatar, ['alt'=>'', 'style' => 'width:95%;',]);
+    ?>
 </div>
 
 <div class="col-md-6">
     <h3 style="font-weight: bold;"><?= Html::encode($model->full_name) ?></h3>
     <h4 style="font-style: italic;"><?= Html::encode($model->username) ?></h4>
-    
+    <?php
+    if ($model->role == 0) {
+    ?>
     <button class="btn btn-primary btn-sm">User</button>
-    <button class="btn btn-success btn-sm">Admin</button>
+    <?php } ?>
+    <?php
+    if ($model->role == 1) {
+        ?>
+        <button class="btn btn-primary btn-sm">Admin</button>
+    <?php } ?>
+    <?php
+    if ($model->role == 2) {
+        ?>
+        <button class="btn btn-primary btn-sm">Director</button>
+    <?php } ?>
     <br /><br />
     
-    <h4 style="font-weight: bold;">General information</h4>
+    <h4 style="font-weight: bold;">General information <a href="index.php?r=site/edit" class="btn btn-info" style="float:right; font-size: 12px;" role="button" >Edit</a></h4>
     <div class="block" style="border-bottom: 2px solid #eee;"></div>
 
     <div id="contentBox" style="margin:20px auto 0 auto; width:100%">

@@ -79,8 +79,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['password'],'string','min'=>6],
             [['password'], 'required'],
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg','maxSize' => 1024 * 1024 * 2],
             [['team'],'safe'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false,'maxSize' => 1024 * 1024 * 2],
         ];
     }
 
@@ -284,6 +284,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return $user_team;
     }
+<<<<<<< HEAD
    
     public function upload()
     {
@@ -295,6 +296,8 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
     }
+=======
+>>>>>>> develop
     
     public function addTeam(){
         $addlist=[];
@@ -325,6 +328,17 @@ class User extends ActiveRecord implements IdentityInterface
         foreach($dellist as $delindex){
             $deltarget=TeamMember::getObjectById($delindex,$this->id);
             $deltarget->delete();
+        }
+    }
+    public function upload()
+    {
+        if ($this->validate()) {
+            if ($this->imageFile == null) return false;
+            $this->imageFile->saveAs(Yii::$app->basePath . '/uploads/' . $this->username . '.' . $this->imageFile->extension);
+            $this->avatar = $this->username . '.' . $this->imageFile->extension;
+            return true;
+        } else {
+            return false;
         }
     }
 }
