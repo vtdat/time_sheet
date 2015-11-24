@@ -21,9 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
 
-<div class="form-group row">
-        <div ><?= Html::submitButton($model->role<1 ? 'User' : 'Admin', ['class' => $model->role<1 ? 'btn btn-default' : 'btn btn-primary']) ?></div>
-</div>
+<br/>
 
     
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
@@ -57,14 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'placeholder'=>"Nhập số điện thoại",
             'value'=>$user->telephone,
         ])?>
-        <?= $form->field($model, 'imageFile')->fileInput([
-            'placeholder'=>"Upload ảnh",
-        ]) ?>
-
-        <?= $form->field($model, 'avatar')->textInput([
-            'placeholder'=>"Nhập a",
-            'value'=>$user->avatar,
-        ])?>    
+        <?= $form->field($model, 'imageFile')->fileInput() ?>
 
         <?= 
             $form->field($model, 'team')->widget(
