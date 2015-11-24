@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "team".
  *
@@ -25,7 +25,12 @@ class Team extends \yii\db\ActiveRecord
     {
         return 'team';
     }
-
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
     /**
      * @inheritdoc
      */
@@ -69,4 +74,9 @@ class Team extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Work::className(), ['team_id' => 'id']);
     }
+    
+    public function getTeamName($teamid){
+        return Team::findOne($teamid)->team_name;
+    }
+    
 }

@@ -1,8 +1,11 @@
 <?php
 
+
 namespace frontend\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use frontend\models\Team;
 
 /**
  * This is the model class for table "team_member".
@@ -26,13 +29,24 @@ class TeamMember extends \yii\db\ActiveRecord
         return 'team_member';
     }
 
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+    
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['team_id', 'user_id', 'created_at', 'updated_at'], 'required'],
+
+            [['team_id', 'user_id'], 'required'],
+
             [['team_id', 'user_id', 'created_at', 'updated_at'], 'integer']
         ];
     }
@@ -65,5 +79,23 @@ class TeamMember extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    
+    public function getTeamName($teamid){
+        return Team::findOne(['id'=>$teamid])->team_name;
+    }
+    
+    public function getObjectById($teamid,$userid){
+        return TeamMember::findOne(['team_id'=>$teamid,'user_id'=>$userid]);
+    }
+   
+    public function getTeamListByUser($userid){
+        $teamlist=TeamMember::find()->where(['user_id'=>$userid])->all();
+        $teamid=[];
+        foreach($teamlist as $team){
+            $teamid[]=$team->team_id;
+        }     
+        return $teamid;
     }
 }

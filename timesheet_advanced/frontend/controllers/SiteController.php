@@ -2,7 +2,9 @@
 namespace frontend\controllers;
 
 use Yii;
+use common\models\User;
 use common\models\LoginForm;
+
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -12,8 +14,8 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 
-use common\models\User;
 
 /**
  * Site controller
@@ -223,9 +225,31 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-
+    
     public function actionProfile($id)
     {
         return $this->render('profile', ['model' => User::findModel($id)]);
+    }
+    
+    public function actionEdit()
+    {
+        if(Yii::$app->user->isGuest) {
+            return $this->redirect('index.php');
+        } else {
+            $model = User::findModel(Yii::$app->user->identity->id);
+            if ($model->load(Yii::$app->request->post())){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+                $model->addTeam();
+                $model->save();
+                return $this->goHome();
+            } else {
+                return $this->render('edit', [
+                    'model' => $model,
+                    'id' => Yii::$app->user->identity->id,
+                ]);
+            }
+            //return $this->render('edit', ['model' => User::findModel($id)]);
+        }
     }
 }
