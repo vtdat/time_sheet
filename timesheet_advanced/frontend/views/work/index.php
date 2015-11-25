@@ -153,7 +153,7 @@ $formatter = Yii::$app->formatter;
         'filterModel' => $searchModel,
         'columns' => $gridColumns,
         'hover' => TRUE,
-        'striped' => FALSE,
+        'striped' => false,
         'rowOptions' => function ($model, $key, $index, $grid) {
             return [
                 'id' => $model['timesheet_id'],
@@ -163,7 +163,7 @@ $formatter = Yii::$app->formatter;
         
         'panel' => [
             'heading' => '<span class="glyphicon glyphicon-list-alt"></span>',
-            'type' => GridView::TYPE_DEFAULT,
+            'type' => GridView::TYPE_SUCCESS,
         ],
         'toolbar' => [
             [

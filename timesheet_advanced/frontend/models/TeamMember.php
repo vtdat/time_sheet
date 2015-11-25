@@ -98,4 +98,10 @@ class TeamMember extends \yii\db\ActiveRecord
         }     
         return $teamid;
     }
+    public function deleteAllTeam($userid){
+        $teams=TeamMember::find()->where(['user_id'=>$userid])->all();
+        foreach($teams as $team){
+            $team->delete();
+        }
+    }
 }

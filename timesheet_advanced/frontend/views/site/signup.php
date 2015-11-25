@@ -16,13 +16,13 @@ $this->title = 'Signup';
 
     <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-    <?= $form->field($model, 'full_name')->textInput(['placeholder' => 'Enter full name']) ?>
-
     <?= $form->field($model, 'username')->textInput(['placeholder' => 'Enter username']) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Enter password']) ?>
 
     <?= $form->field($model, 'email')->textInput(['placeholder' => 'Enter email']) ?>
+    
+    <?= $form->field($model, 'full_name')->textInput(['placeholder' => 'Enter full name']) ?>
 
     <?= $form->field($model, 'address')->textInput(['placeholder' => 'Enter address']) ?>
 

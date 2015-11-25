@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 use frontend\models\TeamMember;
-
+use frontend\models\Timesheet;
 /**
  * This is the model class for table "user".
  *
@@ -69,15 +69,18 @@ class User extends ActiveRecord implements IdentityInterface
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['address', 'full_name', 'avatar'], 'string', 'max' => 50],
+            [['full_name'], 'required'],
             [['telephone'], 'string', 'max' => 20],
-            [['username'], 'unique'],
-            [['email'], 'unique'],
+            ['username', 'unique','message' => 'This username  has already been taken.'],
+            ['email', 'unique','message' => 'This email address has already been taken.'],
+            [['email'], 'email'],
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['password'],'string','min'=>6],
+            [['password'], 'required'],
             [['team'],'safe'],
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false,],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, gif', 'checkExtensionByMimeType'=>false,'maxSize' => 1024 * 1024 * 2],
         ];
     }
 
@@ -102,6 +105,7 @@ class User extends ActiveRecord implements IdentityInterface
             'role' => 'Role',
             'birthday' => 'Birthday',
             'avatar' => 'Avatar',
+            'team' => 'Đăng ký team của bạn: ',
         ];
     }
 
@@ -282,6 +286,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
     
     public function addTeam(){
+        if ($this->team == null) {
+            return;
+        }
         $addlist=[];
         $dellist=[];
         $teamlist=TeamMember::find()->where(['user_id'=>$this->id])->all();
@@ -323,4 +330,23 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
     }
+    
+    public function calPoint($userid,$date){
+        $timesheets=Timesheet::find()->where(['user_id'=>$userid])->all();
+        $first=date('Y-m-01',strtotime($date));
+        $last=date('Y-m-t',strtotime($date));
+        $count=0;
+        $sumpoint=0;
+        foreach ($timesheets as $timesheet){
+            if(strtotime($timesheet->date)>=strtotime($first) && strtotime($timesheet->date)<=strtotime($last)){
+                if($timesheet->status){
+                    $count++;
+                    $sumpoint+=$timesheet->point;
+                }
+            }
+        }
+        if ($count == 0) return 0;
+        return $sumpoint/$count;
+    }
+    
 }

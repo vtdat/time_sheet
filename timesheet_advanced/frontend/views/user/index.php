@@ -11,7 +11,10 @@ $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
-
+    <?php if(Yii::$app->session->hasFlash("NoDeleteRoot")) { ?>
+        <div class="alert alert-danger">Không thể xóa Director. You only a admin. Kid !</div>
+    <?php } ?>
+        
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -37,7 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'address',
              'full_name',
             // 'telephone',
-             'role',
+            //'role',
+            [
+            'attribute' => 'role',
+            'value' => function ($data) {
+                return $data->role==0?'User':($data->role==1?'Admin':'Director');
+            }
+            ],
             // 'birthday',
             // 'avatar',
 

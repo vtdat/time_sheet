@@ -7,14 +7,12 @@ class m151123_132929_fix_avatar extends Migration
 {
     public function up()
     {
-        $this->dropColumn('{{%user}}','avatar');
-        $this->addColumn('{{%user}}','avatar','varchar(1000)');
+        $this->alterColumn('{{%user}}','avatar','varchar(1000)');
     }
 
     public function down()
     {
-        $this->dropColumn('{{%user}}','avatar');
-        $this->addColumn('{{%user}}','avatar','varchar(50)');
+        $this->alterColumn('{{%user}}','avatar','varchar(50)');
     }
 
     /*

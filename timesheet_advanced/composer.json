@@ -30,7 +30,8 @@
         "tebazil/yii2-db-seeder": "*",
 	"kartik-v/yii2-editable": "*",
 	"kartik-v/yii2-export": "*",
-        "kartik-v/yii2-nav-x": "*"
+        "kartik-v/yii2-nav-x": "*",
+        "kartik-v/yii2-widget-touchspin": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

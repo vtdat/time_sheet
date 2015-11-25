@@ -7,6 +7,7 @@ use frontend\models\WorkSearch;
 use frontend\models\Timesheet;
 use frontend\models\Process;
 use frontend\models\Team;
+use frontend\models\CreateTimesheetForm;
 
 use yii\base\Model;
 use Yii;
@@ -82,13 +83,15 @@ class WorkController extends Controller
             $workId= Yii::$app->request->post('editableKey');
             $timesheetId=Work::findOne($workId)->timesheet_id;
             $model = Timesheet::findOne($timesheetId);
-            $out = Json::encode(['output'=>'', 'message'=>'']);
-            
             $post = current($_POST['Work']);
+            $error=Json::encode(['output'=>'', 'message'=>'Validate error']);
             foreach($post as $postname => $value){
                 if($postname=="timesheet.point"){
                     $model->point=$value;
-                    if ($value != null) {
+                    if ($value !== null) {
+                        if(($value<0)||($value>2)){ 
+                            return Json::encode(['output'=>'', 'message'=>'chỉ được nhập từ 0 đến 2']);
+                        }   
                         $model->status = 1;
                     }
                     else{
@@ -103,10 +106,12 @@ class WorkController extends Controller
             if($model->validate()){
                 $model->save();
             }
-            
-            echo $out;
-            return ;
+            else{
+                return $error;
+            }
+            return Json::encode(['output'=>'', 'message'=>'']);
         }
+        
 
         return $this->render('chamdiem', [
             'searchModel' => $searchModel,
@@ -119,7 +124,9 @@ class WorkController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-
+    public function actionCreatemulti(){
+        
+    }
     public function actionCreate()
     {   
         $id=Yii::$app->user->identity->id;
@@ -154,7 +161,7 @@ class WorkController extends Controller
             if ($model->validate()) {
                 $newmodel=Timesheet::findTimesheet($id,$model->date);
                 if($newmodel==null){
-                    if ( strtotime($model->date) > strtotime(date('Y-m-d')) ){
+                    if (\strtotime($model->date) > \strtotime(\date('Y-m-d')) ){
                         Yii::$app->session->setFlash("WrongDate");
                         $model->date=date('Y-m-d');
                         return $this->render('createTimesheet',['model'=>$model,'modelDetails'=>$modelDetails]);
@@ -299,4 +306,5 @@ class WorkController extends Controller
             throw new HttpException(403, 'You have no permission to view this content');
         }
     }
+    
 }

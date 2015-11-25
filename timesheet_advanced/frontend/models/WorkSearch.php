@@ -157,7 +157,8 @@ class WorkSearch extends Work
             'sort' => [
                 'defaultOrder' => [
                     'timesheet.status' => SORT_ASC, 
-                    'timesheet.date' => SORT_DESC,               
+                    'timesheet.date' => SORT_DESC,   
+                    'user.full_name' => SORT_DESC,
                 ],
                 'attributes' => [
                     'work_time',

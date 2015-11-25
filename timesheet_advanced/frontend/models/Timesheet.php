@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use common\models\User;
 use yii\behaviors\TimestampBehavior;
+use frontend\models\Work;
 /**
  * This is the model class for table "timesheet".
  *
@@ -94,4 +95,16 @@ class Timesheet extends \yii\db\ActiveRecord
         return null;
     }
     
+    public function deleteAllTimesheet($userid){
+        $timesheets=Timesheet::find()->where(['user_id'=>$userid])->all();
+        foreach($timesheets as $timesheet){
+            if($timesheet!=null){
+                $works=Work::find()->where(['timesheet_id'=>$timesheet->id])->all();
+                foreach($works as $work){
+                    $work->delete();
+                }
+                $timesheet->delete();
+            }
+        }
+    }
 }

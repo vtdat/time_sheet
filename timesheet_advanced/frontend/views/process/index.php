@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'process_name',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

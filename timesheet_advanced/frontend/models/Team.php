@@ -37,7 +37,7 @@ class Team extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['team_name', 'created_at', 'updated_at'], 'required'],
+            [['team_name'], 'required'],
             [['created_at', 'updated_at'], 'integer'],
             [['team_name'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 255],

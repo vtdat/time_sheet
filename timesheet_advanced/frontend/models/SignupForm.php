@@ -25,7 +25,8 @@ class SignupForm extends Model
     {
         return [
             [['birthday'], 'safe'],
-            [['address', 'full_name'], 'string', 'max' => 50],
+            [['address','full_name'], 'string', 'max' => 50],
+            ['full_name', 'required'],
             [['telephone'], 'string', 'max' => 20],
             ['username', 'filter', 'filter' => 'trim'],
 
@@ -56,6 +57,7 @@ class SignupForm extends Model
 
             $user->username = $this->username;
             $user->email = $this->email;
+            $user->password = $this->password;
             $user->setPassword($this->password);
             $user->generateAuthKey();
             $user->full_name = $this->full_name;

@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\HttpException;
 use yii\filters\VerbFilter;
+use frontend\models\Timesheet;
+use frontend\models\TeamMember;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -75,8 +77,18 @@ class UserController extends Controller
     {
         $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->setPassword($model->password);
+            $model->generateAuthKey();
+            if($model->validate()){
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                return $this->render('create', [
+                'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -111,11 +123,18 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model=$this->findModel($id);
+        if($model->role>1){
+            Yii::$app->session->setFlash("NoDeleteRoot");
+        }
+        else{
+            Timesheet::deleteAllTimesheet($model->id);
+            TeamMember::deleteAllTeam($model->id);
+            $model->delete();
+        }
         return $this->redirect(['index']);
     }
-
+    
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
