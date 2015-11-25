@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="col-md-6">
     <h3 style="font-weight: bold;"><?= Html::encode($model->full_name) ?></h3>
     <h4 style="font-style: italic;"><?= Html::encode($model->username) ?></h4>
-
+    
     <button class="btn btn-primary btn-sm">User</button>
     <button class="btn btn-success btn-sm">Admin</button>
     <br /><br />

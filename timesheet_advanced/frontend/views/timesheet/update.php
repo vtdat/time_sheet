@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\i18n\Formatter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 use kartik\widgets\ActiveForm;
 use kartik\builder\TabularForm;
@@ -85,6 +86,11 @@ echo TabularForm::widget([
 			],
 		],
 	],
+	'actionColumn' => [
+		'template' => '{delete}',
+		'controller' => 'work',
+	],
+	'checkboxColumn' => false,
 ]);
 
 ?>

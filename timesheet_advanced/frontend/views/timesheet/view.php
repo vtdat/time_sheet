@@ -27,7 +27,7 @@ $this->title = $formatter->asDate($model->date,'medium');
     <span class="glyphicon glyphicon-alert">  </span>
     This timesheet has not been marked yet!
 </div>
-<?php } else { ?>
+<?php } ?>
 <p>
     <span style="font-weight: bold;">Point: </span>
     <?= Html::encode($model->point) ?>
@@ -36,9 +36,8 @@ $this->title = $formatter->asDate($model->date,'medium');
     <span style="font-weight: bold;">Director comment: </span>
     <?= Html::encode($model->director_comment) ?>
 </p>
-<?php } 
 
-if(Yii::$app->session->hasFlash('updateOK')) { ?>
+<?php if(Yii::$app->session->hasFlash('updateOK')) { ?>
 <div class="alert alert-success">
     Updated successfully!
 </div>

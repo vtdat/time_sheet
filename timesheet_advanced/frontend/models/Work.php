@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "work".
  *
@@ -30,7 +30,12 @@ class Work extends \yii\db\ActiveRecord
     {
         return 'work';
     }
-
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
     /**
      * @inheritdoc
      */
@@ -38,7 +43,8 @@ class Work extends \yii\db\ActiveRecord
     {
         return [
             [['work_time', 'work_name'], 'required'],
-            [['timesheet_id', 'team_id', 'process_id', 'work_time', 'created_at', 'updated_at'], 'integer'],
+            [['timesheet_id', 'team_id', 'process_id', 'created_at', 'updated_at'], 'integer'],
+            [['work_time'],'double'],
             [['work_name'], 'string', 'max' => 50],
             [['comment'], 'string', 'max' => 255],
         ];
@@ -68,6 +74,8 @@ class Work extends \yii\db\ActiveRecord
             [
                 'timesheet.date',
                 'process.process_name',
+                'timesheet.point',
+                'timesheet.director_comment',
             ]);
     }
 

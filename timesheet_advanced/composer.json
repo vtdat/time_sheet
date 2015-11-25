@@ -26,9 +26,11 @@
         "kartik-v/yii2-widget-activeform": "@dev",
         "kartik-v/yii2-builder": "@dev",
         "kartik-v/yii2-widgets": "*",
-        "kartik-v/yii2-datecontrol": "dev-master",
-        "kartik-v/yii2-markdown": "dev-master",
-        "tebazil/yii2-db-seeder": "*"
+        "kartik-v/yii2-datecontrol": "@dev",
+        "tebazil/yii2-db-seeder": "*",
+	"kartik-v/yii2-editable": "*",
+	"kartik-v/yii2-export": "*",
+        "kartik-v/yii2-nav-x": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

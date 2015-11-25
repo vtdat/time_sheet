@@ -1,13 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\i18n\Formatter;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
-
 use kartik\grid\GridView;
-use kartik\grid\DataColumn;
-use kartik\grid\ExpandRowColumn;
+use kartik\editable\Editable;
 
 use common\models\User;
 use frontend\models\Process;
@@ -18,19 +14,16 @@ use frontend\models\Team;
 /* @var $searchModel frontend\models\WorkSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'HBLab Timesheets';
+$this->title = 'Chấm điểm timesheet';
 $this->params['breadcrumbs'][] = $this->title;
 
 $formatter = Yii::$app->formatter;
 ?>
 <div class="work-index container-fluid">
 
-    <h1 style="text-align: center; margin-bottom: 40px;"><?= Html::encode($this->title) ?></h1>
+    <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
 
-    <?php if(Yii::$app->session->hasFlash('TimesheetDeleted')) { ?>
-    <div class="alert alert-success">Timesheet has been deleted!</div>
-
-    <?php }
+    <?php 
         $gridColumns = [
             // DATE column
             [
@@ -39,7 +32,7 @@ $formatter = Yii::$app->formatter;
                 'group' => true,
                 'groupOddCssClass' => false,
                 'groupEvenCssClass' => false,
-                'width' => '17em',
+                'width' => '13em',
                 'filterType' => GridView::FILTER_DATE,
                 'filterWidgetOptions' => [
                     'pluginOptions' => 
@@ -47,7 +40,7 @@ $formatter = Yii::$app->formatter;
                             'autoClose' => true,
                             'format' => 'yyyy-mm-dd',
                         ],
-                    //'removeButton' => false,
+                    'removeButton' => false,
                 ],
                 'hAlign' => GridView::ALIGN_CENTER,
             ],
@@ -56,14 +49,14 @@ $formatter = Yii::$app->formatter;
                 'label' => 'User', 
                 'attribute' => 'user.full_name',
                 'width' => '15em',
+                'group' => true,
+                'subGroupOf' => 0,
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter'=>ArrayHelper::map(User::find()->orderBy('full_name')->asArray()->all(), 'full_name', 'full_name'),
                 'filterWidgetOptions' => [
                     'pluginOptions'=>['allowClear'=>true],
                     'options'=>['placeholder'=> 'Full name'],
                 ],
-                'group' => true,
-                'subGroupOf' => 0,
             ],            
             // WORKTIME column
             [
@@ -101,8 +94,7 @@ $formatter = Yii::$app->formatter;
             [
                 'label' => 'Work Details',
                 'attribute' => 'work_name',
-                'mergeHeader' => true,
-                'width' => '10em',                
+                'mergeHeader' => true,                
             ],
             // COMMENT column
             [
@@ -112,6 +104,7 @@ $formatter = Yii::$app->formatter;
             ],
             // POINT column
             [
+                'class'=>'kartik\grid\EditableColumn',
                 'label' => 'Point', 
                 'attribute' => 'timesheet.point',
                 'group' => true,
@@ -126,9 +119,22 @@ $formatter = Yii::$app->formatter;
                     'options'=>['placeholder'=> 'Point'],
                 ],
                 'hAlign' => GridView::ALIGN_CENTER,
+                'editableOptions' => [
+                    'header' => 'điểm',
+                    'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                    'format'=> Editable::FORMAT_BUTTON,
+                    'valueIfNull'=>'<em style="color:red">Chưa chấm !</em>',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> Chấm ',
+                    'type'=>'danger',
+                    'placement'=>'left',
+                    'options' => [
+                        'placeholder'=>'Chấm điểm ở đây'
+                    ]
+                ],
             ],
             // DRECTOR COMMENT column
             [
+                'class'=>'kartik\grid\EditableColumn',
                 'label' => 'Director Comment', 
                 'attribute' => 'timesheet.director_comment',
                 'group' => true,
@@ -136,35 +142,22 @@ $formatter = Yii::$app->formatter;
                 'groupEvenCssClass' => false,
                 'subGroupOf' => 1,
                 'mergeHeader' => true,
-            ],
-            // STATUS column
-            /*
-            [
-                'attribute' => 'timesheet.status',
-            ],
-            */
-            // ACTION column
-            
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update}',
-                'controller' => 'timesheet',
-                'buttons' => [
-                    'view' => function($url, $model) {
-                        $url = '..\web\index.php?r=timesheet/view&id='.$model->timesheet_id;
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 
-                            $url
-                        );
-                    },
-                    'update' => function($url, $model) {
-                        $url = '..\web\index.php?r=timesheet/update&id='.$model->timesheet_id;
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 
-                            $url
-                        );
-                    },
+                'editableOptions' => [
+                    'header' => 'comment',
+                    'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
+                    'valueIfNull'=>'<em style="color:red">Chưa comment !</em>',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> Viết ',
+                    'editableValueOptions'=>[
+                        'style'=>'color: blue',
+                    ],
+                    'type'=>'warning',
+                    'size'=>'lg',
+                    'placement'=>'left',
+                    'options' => [
+                        'placeholder'=>'Viết comment vào đây'
+                    ]
                 ],
             ],
-            
         ];
     ?>
 
@@ -174,33 +167,6 @@ $formatter = Yii::$app->formatter;
         'columns' => $gridColumns,
         'hover' => TRUE,
         'striped' => FALSE,
-        
-        'rowOptions' => function ($model, $key, $index, $grid) {
-            return [
-                'id' => $model['timesheet_id'],
-                'onclick' => 'window.location.href = "index.php?r=timesheet/view&id="+this.id;'
-            ];
-        },
-        
-        /*
-        'panel' => [
-            'heading' => '<span class="glyphicon glyphicon-list-alt"></span>',
-            'type' => GridView::TYPE_DEFAULT,
-        ],
-        */
-        'toolbar' => [
-            [
-                'content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i> Create', 
-                    ['work/create','id' => Yii::$app->user->identity->id],['class'=>'btn btn-success']),
-            ],
-            '{toggleData}',
-            '{export}',
-        ],
-        'export' => [
-            'fontAwesome' => false,
-            'label' => 'Export',
-        ],
-        
     ]); ?>
+    
 </div>
