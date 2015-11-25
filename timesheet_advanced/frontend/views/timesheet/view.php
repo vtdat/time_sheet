@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use yii\i18n\Formatter;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 use frontend\models\Process;
 use frontend\models\Team;
@@ -120,9 +121,9 @@ $gridColumns = [
     <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit',
         'index.php?r=timesheet/update&id='.$model->id,
         ['class' => $model->status ? 'btn btn-primary disabled' : 'btn btn-primary']) ?>
-    <?= Html::a('<span class="glyphicon glyphicon-trash"></span> Delete all',
-        ['\timesheet\delete'],
-        ['class' => $model->status ? 'btn btn-danger disabled' : 'btn btn-danger']) ?>
+    <?= Html::a('Delete all <span class="glyphicon glyphicon-trash"></span>', 
+        Url::to(['timesheet/delete', 'id' => $model['id']]), 
+        ['class' => 'btn btn-danger', 'data-method' => 'POST', 'data-confirm' => 'Are you sure to delete this timesheet?']) ?>
 </div>
 
 <?php } ?>

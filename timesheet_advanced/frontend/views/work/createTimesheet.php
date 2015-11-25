@@ -18,6 +18,13 @@ use frontend\models\TeamMember;
 use frontend\models\Process;
 use common\models\User;
 ?>
+<!--
+<head>
+    <style type="text/css">
+    .work-form * {border: 1px solid gray;}
+    </style>
+</head>
+-->
 
 <?php $this->registerJs("
     $('.delete-button').click(function() {
@@ -35,7 +42,7 @@ use common\models\User;
         $teamlist[$team->team_id]=TeamMember::getTeamName($team->team_id);
     }
 ?>
-<?="Điểm trung bình tháng ".date('m')." của bạn là: ".User::calPoint($userid,date('Y-m-d'))?>
+<?="Your average point of this month is ".User::calPoint($userid,date('Y-m-d'))?>
 <div class="work-form">
  
     <?php $form = ActiveForm::begin([
@@ -50,11 +57,17 @@ use common\models\User;
     <?= "<h2>Timesheet Date:</h2>"?>
     
     <?php if(Yii::$app->session->hasFlash("NoModify")) { ?>
-        <div class="alert alert-danger">Timesheet đã được Chấm điểm - Không thể add thêm</div>
+        <div class="alert alert-danger">
+            <strong>Cannot modify! </strong>
+            This timesheet has been marked!
+        </div>
     <?php } ?>
         
     <?php if(Yii::$app->session->hasFlash("WrongDate")) { ?>
-        <div class="alert alert-danger">Bạn không thể tạo timesheet cho ngày hôm sau</div>
+        <div class="alert alert-danger">
+            <strong>Cannot create! </strong>
+            You cannot create timesheet of tommorrow!
+        </div>
     <?php } ?> 
         
     <?= $form->field($model, 'date')->widget(
@@ -71,7 +84,7 @@ use common\models\User;
     
     <?php foreach ($modelDetails as $i => $modelDetail) : ?>
         <div class="row work-detail work-detail-<?= $i ?>">
-            <div class="col-md-2" style="width: auto"><?= 
+            <div class="col-md-2"><?= 
                 $form->field($modelDetail, "[$i]team_id" )->widget(
                     Select2::className(), [
                         'theme'=> 'bootstrap',
@@ -93,7 +106,7 @@ use common\models\User;
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput()?></div>
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]comment" )->textarea(['rows'=>1])?></div>
             <div class="col-md-2" style="padding-left: 30px;padding-bottom: 10px">
-                <?= Html::button('x', ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) ?>
+                <?= Html::button('<span class="glyphicon glyphicon-remove"></span>', ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) ?>
             </div>
         </div>
       

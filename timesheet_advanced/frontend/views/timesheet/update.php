@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\i18n\Formatter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 use kartik\widgets\ActiveForm;
 use kartik\builder\TabularForm;
@@ -85,12 +86,24 @@ echo TabularForm::widget([
 			],
 		],
 	],
+	'actionColumn' => [
+		'template' => '{delete}',
+		'controller' => 'work',
+	],
+	'checkboxColumn' => false,
 ]);
 
 ?>
 
 <div class="form-group" style="text-align: right; margin-top: 20px;">
-	<?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+	<?= Html::a('Add row <span class="glyphicon glyphicon-plus"></span>',
+		'',
+		['class' => 'btn btn-primary']) ?>
+	<?= Html::a('Delete all <span class="glyphicon glyphicon-trash"></span>', 
+		Url::to(['timesheet/delete', 'id' => $model['id']]), 
+		['class' => 'btn btn-danger', 'data-method' => 'POST', 'data-confirm' => 'Are you sure to delete this timesheet?']) ?>
+	<?= Html::submitButton('Save <span class="glyphicon glyphicon-ok"></span>', 
+		['class' => 'btn btn-success']) ?>
 </div>
 
 <?php

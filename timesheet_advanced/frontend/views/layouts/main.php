@@ -50,10 +50,10 @@ AppAsset::register($this);
         ];
         $menuItemsLeft[] = ['label' => 'View', 'url' => ['/work/']];   
         $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create']];
+        $menuItemsLeft[] = ['label' => 'Statistics', 'url' => ['/site/point']];
         if(Yii::$app->user->identity->role>=2){
-            $menuItemsLeft[] = ['label' => 'Chấm điểm', 'url' => ['/work/chamdiem']];
+            $menuItemsLeft[] = ['label' => 'Mark', 'url' => ['/work/chamdiem']];
         }
-        $menuItemsLeft[] = ['label' => 'Thống kê', 'url' => ['/site/point']];
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],
             'items' => $menuItemsLeft,
@@ -69,10 +69,10 @@ AppAsset::register($this);
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
-                    ['label' => 'Manager', 'items' => [
-                        ['label' => 'User manager', 'url' => ['/user/']],
-                        ['label' => 'Team manager', 'url' => ['/team/']],
-                        ['label' => 'Process manager', 'url' => ['/process/']],
+                    ['label' => 'Manage', 'items' => [
+                        ['label' => 'User manage', 'url' => ['/user/']],
+                        ['label' => 'Team manage', 'url' => ['/team/']],
+                        ['label' => 'Process manage', 'url' => ['/process/']],
                     ]],
                 ],
             ]);

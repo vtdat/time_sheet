@@ -115,14 +115,7 @@ class TimesheetController extends Controller
     public function actionUpdate($id)
     { 
         $model = $this->findModel($id);
-        if(Yii::$app->user->identity->id!==$model->user_id){
-            throw new HttpException(403, 'You have no permission to view this content');
-        }
-        if($model->status){
-            throw new HttpException(400, 'You cannot edit this timesheet');
-        }
         $query = Work::find()->where(['timesheet_id' => $model->id]);
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => false,
@@ -153,9 +146,18 @@ class TimesheetController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $timesheet = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        $works = $timesheet->getWorks()->all();
+        foreach ($works as $work) {
+            $work->delete();
+        }
+
+        $timesheet->delete();
+
+        Yii::$app->session->setFlash('TimesheetDELETED');
+
+        return $this->goHome();
     }
 
     /**

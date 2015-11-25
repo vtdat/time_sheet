@@ -26,6 +26,10 @@ $formatter = Yii::$app->formatter;
 
     <h1 style="text-align: center; margin-bottom: 40px;"><?= Html::encode($this->title) ?></h1>
 
+    <?php if(Yii::$app->session->hasFlash('TimesheetDELETED')) { ?>
+        <div class="alert alert-success">Timesheet has been deleted successfully!</div>
+    <?php } ?>
+
     <?php 
         $gridColumns = [
             // DATE column
@@ -68,6 +72,7 @@ $formatter = Yii::$app->formatter;
                 'width' => '2em',
                 'mergeHeader' => true,
                 'hAlign' => GridView::ALIGN_CENTER,
+                'vAlign' => GridView::ALIGN_TOP,
             ],
             // TEAM column
             [
@@ -97,18 +102,23 @@ $formatter = Yii::$app->formatter;
             [
                 'label' => 'Work Details',
                 'attribute' => 'work_name',
-                'mergeHeader' => true,                
+                'mergeHeader' => true,          
+                'vAlign' => GridView::ALIGN_TOP,      
             ],
             // COMMENT column
             [
                 'label' => 'Comment',
                 'attribute' => 'comment',
                 'mergeHeader' => true,                
+                'vAlign' => GridView::ALIGN_TOP,
             ],
             // POINT column
             [
                 'label' => 'Point', 
                 'attribute' => 'timesheet.point',
+                'value' => function($data) {
+                    return $data->timesheet->status == 0 ? '-' : $data->timesheet->point;
+                },
                 'group' => true,
                 'groupOddCssClass' => false,
                 'groupEvenCssClass' => false,
@@ -126,11 +136,15 @@ $formatter = Yii::$app->formatter;
             [
                 'label' => 'Director Comment', 
                 'attribute' => 'timesheet.director_comment',
+                'value' => function($data) {
+                    return $data->timesheet->status == 0 ? '(not commented yet)' : $data->timesheet->director_comment;
+                },
                 'group' => true,
                 'groupOddCssClass' => false,
                 'groupEvenCssClass' => false,
                 'subGroupOf' => 1,
                 'mergeHeader' => true,
+                'vAlign' => GridView::ALIGN_TOP,
             ],
             // STATUS column
             /*
@@ -139,12 +153,30 @@ $formatter = Yii::$app->formatter;
             ],
             */
             // ACTION column
-            /*
+            
             [
                 'class' => 'kartik\grid\ActionColumn',
+                'template' => '{update}',
+                'buttons' => [
+                    'update' => function($url, $model, $key) {
+                        $itsUser = $model->getUser()->one();
+                        $itsTimesheet = $model->getTimesheet()->one();
+                        if($itsUser['id'] == Yii::$app->user->identity->id
+                            && $itsTimesheet['status'] == 0) {
+                            $canEdit = 1;
+                        } else {
+                            $canEdit = 0;
+                        }
+                        if($canEdit) {
+                            $url = '../web/index.php?r=timesheet/update&id='.$model['timesheet_id'];
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url);
+                        }
+                    },
+                ],
+                'viewOptions' => ['label' => false],
 
             ],
-            */
+            
         ];
     ?>
 
@@ -152,19 +184,30 @@ $formatter = Yii::$app->formatter;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => $gridColumns,
-        'hover' => TRUE,
+        //'hover' => TRUE,
         'striped' => false,
+        /*
         'rowOptions' => function ($model, $key, $index, $grid) {
+            $itsUser = $model->getUser()->one();
+            if($itsUser['id'] == Yii::$app->user->identity->id) {
+                $isOwner = 1;
+            } else {
+                $isOwner = 0;
+            }
             return [
                 'id' => $model['timesheet_id'],
-                'onclick' => 'window.location.href = "index.php?r=timesheet/view&id="+this.id;'
+                'onclick' => 
+                $isOwner ? 'window.location.href = "index.php?r=timesheet/update&id="+this.id;' :
+                'window.location.href = "index.php?r=timesheet/view&id="+this.id;'
             ];
         },
-        
+        */
+        /*
         'panel' => [
             'heading' => '<span class="glyphicon glyphicon-list-alt"></span>',
             'type' => GridView::TYPE_SUCCESS,
         ],
+        */
         'toolbar' => [
             [
                 'content'=>
