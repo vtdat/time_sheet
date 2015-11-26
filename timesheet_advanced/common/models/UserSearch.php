@@ -31,7 +31,6 @@ class UserSearch extends User
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
-
     /**
      * Creates data provider instance with search query applied
      *
@@ -42,6 +41,8 @@ class UserSearch extends User
     public function search($params)
     {
         $query = User::find();
+
+        $query->joinWith('timesheets');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

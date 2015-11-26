@@ -23,7 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="col-md-3 col-md-offset-2">
     <?php    if ($model->avatar) {
         echo Html::img('../uploads/' . $model->avatar, ['alt' => '', 'style' => 'width:95%;',]);
-    }?>
+    } else {
+        echo Html::img('../uploads/default-avatar.png', ['alt' => '', 'style' => 'width:95%;',]);
+    }
+    ?>
 </div>
 
 <div class="col-md-6">
@@ -46,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } ?>
     <br /><br />
     
-    <h4 style="font-weight: bold;">General information <a href="index.php?r=site/edit" class="btn btn-info" style="float:right; font-size: 12px;" role="button" >Edit</a></h4>
+    <h4 style="font-weight: bold;">General information <a href="index.php?r=site/edit" class="btn btn-info" style=" float:right; font-size: 12px;" role="button" >Edit</a></h4>
     <div class="block" style="border-bottom: 2px solid #eee;"></div>
 
     <div id="contentBox" style="margin:20px auto 0 auto; width:100%">
