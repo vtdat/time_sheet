@@ -35,6 +35,7 @@ use common\models\User;
 ?>
 
 <?php
+    $this->title = 'Create timesheet';
     $userid=Yii::$app->user->getId();
     $teammember=TeamMember::findAll(['user_id'=>$userid]);
     $teamlist=[];
@@ -42,8 +43,13 @@ use common\models\User;
         $teamlist[$team->team_id]=TeamMember::getTeamName($team->team_id);
     }
 ?>
-<?="Your average point of this month is ".User::calPoint($userid,date('Y-m-d'))?>
-<div class="work-form">
+
+<div class="work-form container">
+    <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
+    <div class="alert alert-warning">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        <?="  Your average point of this month is <strong>".User::calPoint($userid,date('Y-m-d'))."</strong>"?>
+    </div>
  
     <?php $form = ActiveForm::begin([
         'enableClientValidation' => false,
@@ -54,7 +60,7 @@ use common\models\User;
             'showErrors'=>true,
         ],
     ]); ?>
-    <?= "<h2>Timesheet Date:</h2>"?>
+    
     
     <?php if(Yii::$app->session->hasFlash("NoModify")) { ?>
         <div class="alert alert-danger">
@@ -70,6 +76,8 @@ use common\models\User;
         </div>
     <?php } ?> 
         
+    <h2>Choose date:</h2>
+
     <?= $form->field($model, 'date')->widget(
             DatePicker::className(),[
                 'name' => 'dp_2',
@@ -80,26 +88,34 @@ use common\models\User;
                 ]
             ]
     ) ?>
-    <?= "<h2>Details</h2>"?>
+    
+    <h2>Details:</h2>
     
     <?php foreach ($modelDetails as $i => $modelDetail) : ?>
         <div class="row work-detail work-detail-<?= $i ?>">
-            <div class="col-md-2"><?= 
+            <div class = "col-md-2"><?= 
                 $form->field($modelDetail, "[$i]team_id" )->widget(
                     Select2::className(), [
                         'theme'=> 'bootstrap',
                         'data' => $teamlist,
                         'options' => ['placeholder' => 'Select team'],
                         'pluginOptions' => [
-                                'allowClear' => true
+                            'allowClear' => true,
+                            'width' => '10em',
                         ], 
                     ]
                 )
             ?></div>
             <div class="col-md-2">
-                <?= $form->field($modelDetail, "[$i]process_id" )->dropDownList(
-                    ArrayHelper::map(Process::find()->all(),'id','process_name'),
-                    ['prompt'=>'Select Process']
+                <?= $form->field($modelDetail, "[$i]process_id" )->widget(
+                    Select2::className(), [
+                        'data' => ArrayHelper::map(Process::find()->all(),'id','process_name'),
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'width' => '10em',
+                        ],
+                        'options' => ['placeholder' => 'Select Process'],
+                    ]
                 )?>
             </div>
             <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_time" )->textInput()?></div>
@@ -112,9 +128,13 @@ use common\models\User;
       
     <?php endforeach; ?>
  
-    <div class="form-group row"> 
-        <div class="col-md-6"><?= Html::submitButton('Add row', ['name' => 'addRow', 'value' => 'true', 'class' => 'btn btn-info']) ?></div>
-        <div class="col-md-6"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?></div>
+
+    <div class="form-group" style="text-align: right; margin-top: 20px;"> 
+        <?= Html::submitButton('Add row <span class="glyphicon glyphicon-plus"></span>', ['name' => 'addRow', 'value' => 'true', 'class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton(
+            $model->isNewRecord ? 'Create <span class="glyphicon glyphicon-ok"></span>' : 'Update <span class="glyphicon glyphicon-ok"></span>', 
+            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
+        ) ?>
     </div>
  
     <?php ActiveForm::end(); ?>

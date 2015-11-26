@@ -22,6 +22,9 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <style type="text/css">
+        ul li:hover{background: black;}
+    </style>
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -29,7 +32,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'HBLab',
+        'brandLabel' => '<img src="/timesheet/frontend/uploads/logo.png" height = 25px/img>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -52,7 +55,7 @@ AppAsset::register($this);
         $menuItemsLeft[] = ['label' => 'Create', 'url' => ['/work/create']];
         $menuItemsLeft[] = ['label' => 'Statistics', 'url' => ['/site/point']];
         if(Yii::$app->user->identity->role>=2){
-            $menuItemsLeft[] = ['label' => 'Mark', 'url' => ['/work/chamdiem']];
+            $menuItemsLeft[] = ['label' => 'Mark', 'url' => ['/work/mark']];
         }
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],

@@ -75,22 +75,23 @@ class WorkController extends Controller
         ]);
     }
 
-    public function actionChamdiem(){
+    public function actionMark(){
         $this->allowUser(2);
         $searchModel = new WorkSearch();
-        $dataProvider = $searchModel->chamdiem(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search_for_mark(Yii::$app->request->queryParams);
+        
         if (Yii::$app->request->post('hasEditable')){
-            $workId= Yii::$app->request->post('editableKey');
-            $timesheetId=Work::findOne($workId)->timesheet_id;
+            $workId = Yii::$app->request->post('editableKey');
+            $timesheetId = Work::findOne($workId)->timesheet_id;
             $model = Timesheet::findOne($timesheetId);
             $post = current($_POST['Work']);
-            $error=Json::encode(['output'=>'', 'message'=>'Validate error']);
+            $error = Json::encode(['output'=>'', 'message'=>'Validate error']);
             foreach($post as $postname => $value){
-                if($postname=="timesheet.point"){
+                if($postname == "timesheet.point"){
                     $model->point=$value;
                     if ($value !== null) {
                         if(($value<0)||($value>2)){ 
-                            return Json::encode(['output'=>'', 'message'=>'chỉ được nhập từ 0 đến 2']);
+                            return Json::encode(['output'=>'', 'message'=>'From 0 to 2 only!']);
                         }   
                         $model->status = 1;
                     }
@@ -113,7 +114,7 @@ class WorkController extends Controller
         }
         
 
-        return $this->render('chamdiem', [
+        return $this->render('mark', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

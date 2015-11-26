@@ -146,7 +146,7 @@ class WorkSearch extends Work
 
         return $dataProvider;
     }
-    public function chamdiem($params)
+    public function search_for_mark($params)
     {
         $query = Work::find()->indexBy('id');
 
