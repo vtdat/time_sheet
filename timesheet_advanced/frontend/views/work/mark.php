@@ -14,7 +14,7 @@ use frontend\models\Team;
 /* @var $searchModel frontend\models\WorkSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Timesheet marking';
+$this->title = 'Timesheet Evaluation';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -69,6 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Team',
                 'attribute' => 'team.team_name', 
                 'width' => '5em',
+                'hAlign' => GridView::ALIGN_CENTER,
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter'=>ArrayHelper::map(Team::find()->orderBy('team_name')->asArray()->all(), 'team_name', 'team_name'),
                 'filterWidgetOptions' => [
@@ -81,6 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Process',
                 'attribute' => 'process.process_name',
                 'width' => '9em',
+                'hAlign' => GridView::ALIGN_CENTER,
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter'=>ArrayHelper::map(Process::find()->orderBy('process_name')->asArray()->all(), 'process_name', 'process_name'),
                 'filterWidgetOptions' => [
@@ -92,15 +94,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Work Details',
                 'attribute' => 'work_name',
-                'mergeHeader' => true,         
-                'vAlign' => GridView::ALIGN_TOP,       
+                'mergeHeader' => true,    
+                'vAlign' => GridView::ALIGN_TOP,            
             ],
             // COMMENT column
             [
                 'label' => 'Comment',
                 'attribute' => 'comment',
-                'mergeHeader' => true, 
-                'vAlign' => GridView::ALIGN_TOP,               
+                'mergeHeader' => true,    
+                'vAlign' => GridView::ALIGN_TOP,            
             ],
             // POINT column
             [
@@ -124,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'inputType' => Editable::INPUT_TEXT,
                     'format'=> Editable::FORMAT_BUTTON,
                     'valueIfNull'=>'<em style="color:red">Not marked!</em>',
-                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i>  ',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> ',
                     'type'=>'primary',
                     'placement'=>'left',
                     'options' => [
@@ -140,6 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'group' => true,
                 'groupOddCssClass' => false,
                 'groupEvenCssClass' => false,
+                'vAlign' => GridView::ALIGN_TOP,
                 'subGroupOf' => 1,
                 'mergeHeader' => true,
                 'editableOptions' => [
@@ -148,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'header' => 'Comment',
                     'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
                     'valueIfNull'=>'<em style="color:red">Not commented!</em>',
-                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i>  ',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i> ',
                     'editableValueOptions'=>[
                         'style'=>'color: blue',
                     ],
@@ -159,7 +162,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'placeholder'=>'Comment here'
                     ]
                 ],
-                'vAlign' => GridView::ALIGN_TOP,
             ],
         ];
     ?>
@@ -168,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => $gridColumns,
-        //'hover' => TRUE,
+        'hover' => TRUE,
         'striped' => FALSE,
     ]); ?>
     
