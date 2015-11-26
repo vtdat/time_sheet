@@ -80,7 +80,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['password'],'string','min'=>6],
             [['password'], 'required'],
             [['team'],'safe'],
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, gif', 'checkExtensionByMimeType'=>false,'maxSize' => 1024 * 1024 * 2],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, gif, jpeg, bmp', 'checkExtensionByMimeType'=>false,'maxSize' => 1024 * 1024 * 2],
         ];
     }
 
@@ -330,7 +330,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
     }
-    
+
     public function calPoint($userid,$date){
         $timesheets=Timesheet::find()->where(['user_id'=>$userid])->all();
         $first=date('Y-m-01',strtotime($date));
