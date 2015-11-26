@@ -75,10 +75,10 @@ class WorkController extends Controller
         ]);
     }
 
-    public function actionChamdiem(){
+    public function actionMark(){
         $this->allowUser(2);
         $searchModel = new WorkSearch();
-        $dataProvider = $searchModel->chamdiem(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search_for_mark(Yii::$app->request->queryParams);
         if (Yii::$app->request->post('hasEditable')){
             $workId= Yii::$app->request->post('editableKey');
             $timesheetId=Work::findOne($workId)->timesheet_id;
@@ -112,7 +112,7 @@ class WorkController extends Controller
             return Json::encode(['output'=>'', 'message'=>'']);
         }
         
-        return $this->render('chamdiem', [
+        return $this->render('mark', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
