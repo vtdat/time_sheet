@@ -88,7 +88,7 @@ class WorkController extends Controller
             foreach($post as $postname => $value){
                 if($postname=="timesheet.point"){
                     $model->point=$value;
-                    if ($value !== null) {
+                    if ($value !== "") {
                         if(($value<0)||($value>2)){ 
                             return Json::encode(['output'=>'', 'message'=>'chỉ được nhập từ 0 đến 2']);
                         }   
@@ -112,7 +112,6 @@ class WorkController extends Controller
             return Json::encode(['output'=>'', 'message'=>'']);
         }
         
-
         return $this->render('chamdiem', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -172,7 +171,7 @@ class WorkController extends Controller
                     }    
                 }
                 else{
-                    if($newmodel->point !== null){
+                    if($newmodel->status){
                         Yii::$app->session->setFlash("NoModify");
                         return $this->render('createTimesheet',['model'=>$newmodel,'modelDetails'=>$modelDetails]);
                     }
