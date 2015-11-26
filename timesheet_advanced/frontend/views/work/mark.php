@@ -1,13 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\i18n\Formatter;
 use yii\helpers\ArrayHelper;
-
 use kartik\grid\GridView;
-use kartik\grid\DataColumn;
-use kartik\grid\ExpandRowColumn;
-use kartik\export\ExportMenu;
+use kartik\editable\Editable;
 
 use common\models\User;
 use frontend\models\Process;
@@ -18,19 +14,12 @@ use frontend\models\Team;
 /* @var $searchModel frontend\models\WorkSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'HBLab Timesheets';
+$this->title = 'Timesheet marking';
 $this->params['breadcrumbs'][] = $this->title;
 
-$formatter = Yii::$app->formatter;
 ?>
 <div class="work-index container-fluid">
-
-    <h1 style="text-align: center; margin-bottom: 40px;"><?= Html::encode($this->title) ?></h1>
-
-    <?php if(Yii::$app->session->hasFlash('TimesheetDELETED')) { ?>
-        <div class="alert alert-success">Deleted successfully!</div>
-    <?php } ?>
-
+    <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
     <?php 
         $gridColumns = [
             // DATE column
@@ -40,7 +29,7 @@ $formatter = Yii::$app->formatter;
                 'group' => true,
                 'groupOddCssClass' => false,
                 'groupEvenCssClass' => false,
-                'width' => '20em',
+                'width' => '13em',
                 'filterType' => GridView::FILTER_DATE,
                 'filterWidgetOptions' => [
                     'pluginOptions' => 
@@ -48,7 +37,7 @@ $formatter = Yii::$app->formatter;
                             'autoClose' => true,
                             'format' => 'yyyy-mm-dd',
                         ],
-                    //'removeButton' => false,
+                    'removeButton' => false,
                 ],
                 'hAlign' => GridView::ALIGN_CENTER,
             ],
@@ -57,14 +46,14 @@ $formatter = Yii::$app->formatter;
                 'label' => 'User', 
                 'attribute' => 'user.full_name',
                 'width' => '15em',
+                'group' => true,
+                'subGroupOf' => 0,
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter'=>ArrayHelper::map(User::find()->orderBy('full_name')->asArray()->all(), 'full_name', 'full_name'),
                 'filterWidgetOptions' => [
                     'pluginOptions'=>['allowClear'=>true],
                     'options'=>['placeholder'=> 'Full name'],
                 ],
-                'group' => true,
-                'subGroupOf' => 0,
             ],            
             // WORKTIME column
             [
@@ -86,7 +75,6 @@ $formatter = Yii::$app->formatter;
                     'pluginOptions'=>['allowClear'=>true],
                     'options'=>['placeholder'=> 'Team'],
                 ],
-                'hAlign' => GridView::ALIGN_CENTER,
             ],
             // PROCESS column
             [
@@ -99,29 +87,26 @@ $formatter = Yii::$app->formatter;
                     'pluginOptions'=>['allowClear'=>true],
                     'options'=>['placeholder'=> 'Process'],
                 ],
-                'hAlign' => GridView::ALIGN_CENTER,
             ],
             // WORK_NAME column
             [
                 'label' => 'Work Details',
                 'attribute' => 'work_name',
-                'mergeHeader' => true,          
-                'vAlign' => GridView::ALIGN_TOP,      
+                'mergeHeader' => true,         
+                'vAlign' => GridView::ALIGN_TOP,       
             ],
             // COMMENT column
             [
                 'label' => 'Comment',
                 'attribute' => 'comment',
-                'mergeHeader' => true,                
-                'vAlign' => GridView::ALIGN_TOP,
+                'mergeHeader' => true, 
+                'vAlign' => GridView::ALIGN_TOP,               
             ],
             // POINT column
             [
+                'class'=>'kartik\grid\EditableColumn',
                 'label' => 'Point', 
                 'attribute' => 'timesheet.point',
-                'value' => function($data) {
-                    return $data->timesheet->point === null ? '-' : $data->timesheet->point;
-                },
                 'group' => true,
                 'groupOddCssClass' => false,
                 'groupEvenCssClass' => false,
@@ -134,114 +119,57 @@ $formatter = Yii::$app->formatter;
                     'options'=>['placeholder'=> 'Point'],
                 ],
                 'hAlign' => GridView::ALIGN_CENTER,
+                'editableOptions' => [
+                    'header' => 'Mark',
+                    'inputType' => Editable::INPUT_TEXT,
+                    'format'=> Editable::FORMAT_BUTTON,
+                    'valueIfNull'=>'<em style="color:red">Not marked!</em>',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i>  ',
+                    'type'=>'primary',
+                    'placement'=>'left',
+                    'options' => [
+                        'placeholder'=>'Mark here',
+                    ],
+                ],
             ],
             // DRECTOR COMMENT column
             [
+                'class'=>'kartik\grid\EditableColumn',
                 'label' => 'Director Comment', 
                 'attribute' => 'timesheet.director_comment',
-                'value' => function($data) {
-                    return $data->timesheet->director_comment === null ? ' ' : $data->timesheet->director_comment;
-                },
                 'group' => true,
                 'groupOddCssClass' => false,
                 'groupEvenCssClass' => false,
                 'subGroupOf' => 1,
                 'mergeHeader' => true,
+                'editableOptions' => [
+                    'submitOnEnter'=>false,
+                    'asPopover'=>true,
+                    'header' => 'Comment',
+                    'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
+                    'valueIfNull'=>'<em style="color:red">Not commented!</em>',
+                    'preHeader'=>'<i class="glyphicon glyphicon-edit"></i>  ',
+                    'editableValueOptions'=>[
+                        'style'=>'color: blue',
+                    ],
+                    'type'=>'primary',
+                    'size'=>'lg',
+                    'placement'=>'left',
+                    'options' => [
+                        'placeholder'=>'Comment here'
+                    ]
+                ],
                 'vAlign' => GridView::ALIGN_TOP,
             ],
-            // STATUS column
-            /*
-            [
-                'attribute' => 'timesheet.status',
-            ],
-            */
-            // ACTION column
-            
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'template' => '{update}',
-                'buttons' => [
-                    'update' => function($url, $model, $key) {
-                        $itsUser = $model->getUser()->one();
-                        $itsTimesheet = $model->getTimesheet()->one();
-                        if($itsUser['id'] == Yii::$app->user->identity->id
-                            && $itsTimesheet['status'] == 0) {
-                            $canEdit = 1;
-                        } else {
-                            $canEdit = 0;
-                        }
-                        if($canEdit) {
-                            $url = '../web/index.php?r=timesheet/update&id='.$model['timesheet_id'];
-                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url);
-                        }
-                    },
-                ],
-                'viewOptions' => ['label' => false],
-
-            ],
-            
         ];
     ?>
 
-    <div class="form-group" style="text-align: right; margin-bottom: 20px;">
-        <?= Html::a('Create <span class="glyphicon glyphicon-plus"></span>', 
-            ['work/create'],
-            ['class' => 'btn btn-primary']
-        ) ?>
-        <?= ExportMenu::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => $gridColumns,
-            'template' => '{menu}{columns}',
-            'dropdownOptions' => [
-                'label' => 'Export',
-                'class' => 'btn btn-success',
-                'fontAwesome' => true,
-            ],
-        ]); ?>
-    
-    </div>
-    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => $gridColumns,
         //'hover' => TRUE,
-        'striped' => false,
-        /*
-        'rowOptions' => function ($model, $key, $index, $grid) {
-            $itsUser = $model->getUser()->one();
-            if($itsUser['id'] == Yii::$app->user->identity->id) {
-                $isOwner = 1;
-            } else {
-                $isOwner = 0;
-            }
-            return [
-                'id' => $model['timesheet_id'],
-                'onclick' => 
-                $isOwner ? 'window.location.href = "index.php?r=timesheet/update&id="+this.id;' :
-                'window.location.href = "index.php?r=timesheet/view&id="+this.id;'
-            ];
-        },
-        */
-        /*
-        'panel' => [
-            'heading' => '<span class="glyphicon glyphicon-list-alt"></span>',
-            'type' => GridView::TYPE_SUCCESS,
-        ],
-        */
-        'toolbar' => [
-            [
-                'content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i> Create', 
-                    ['work/create2','id' => Yii::$app->user->identity->id],['class'=>'btn btn-success']),
-            ],
-            '{toggleData}',
-            '{export}',
-        ],
-        'export' => [
-            'fontAwesome' => false,
-            'label' => 'Export',
-        ],
-        
+        'striped' => FALSE,
     ]); ?>
+    
 </div>

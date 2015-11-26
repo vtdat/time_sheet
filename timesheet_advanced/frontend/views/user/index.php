@@ -10,17 +10,19 @@ use yii\grid\GridView;
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+<div class="user-index container">
     <?php if(Yii::$app->session->hasFlash("NoDeleteRoot")) { ?>
-        <div class="alert alert-danger">Không thể xóa Director. You only a admin. Kid !</div>
+        <div class="alert alert-danger">Cannot delete Director account!</div>
     <?php } ?>
         
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="form-group" style="text-align: right;">
+        <?= Html::a('Create <span class="glyphicon glyphicon-plus"></span>', 
+            ['create'], 
+            ['class' => 'btn btn-success']) 
+        ?>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -30,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'id',
             'username',
+            'full_name',
             //'auth_key',
             //'password_hash',
             //'password_reset_token',
@@ -38,7 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_at',
             // 'updated_at',
             // 'address',
-             'full_name',
             // 'telephone',
             //'role',
             [
