@@ -89,7 +89,7 @@ class WorkController extends Controller
             foreach($post as $postname => $value){
                 if($postname == "timesheet.point"){
                     $model->point=$value;
-                    if ($value !== null) {
+                    if ($value !== "") {
                         if(($value<0)||($value>2)){ 
                             return Json::encode(['output'=>'', 'message'=>'From 0 to 2 only!']);
                         }   
@@ -173,7 +173,7 @@ class WorkController extends Controller
                     }    
                 }
                 else{
-                    if($newmodel->point !== null){
+                    if($newmodel->status){
                         Yii::$app->session->setFlash("NoModify");
                         return $this->render('createTimesheet',['model'=>$newmodel,'modelDetails'=>$modelDetails]);
                     }
