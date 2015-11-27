@@ -37,6 +37,32 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
 
     /**
+     * Array defining user's role
+     * 0 --> User
+     * 1 --> Admin
+     * 2 --> Director (highest priority)
+     */
+    public static $roles = [
+        ['key' => 0, 'role' => 'User'],
+        ['key' => 1, 'role' => 'Admin'],
+        ['key' => 2, 'role' => 'Director'],
+    ];
+
+    /**
+     * Array defining user'status
+     * 10 --> Working (default)
+     *  9 --> Temporarily absent
+     *  8 --> Long absent
+     *  7 --> Retired
+     */
+    public static $status = [
+        ['key' => 10, 'status' => 'Working'],
+        ['key' =>  9, 'status' => 'Temporarily absent'],
+        ['key' =>  8, 'status' => 'Long absent'],
+        ['key' =>  7, 'status' => 'Retired'],
+    ];
+
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -349,4 +375,25 @@ class User extends ActiveRecord implements IdentityInterface
         return $sumpoint/$count;
     }
     
+    public function getRole($id)
+    {
+        $model = $this->findModel($id);
+
+        foreach (User::$roles as $role) {
+            if($model->role == $role['key']) {
+                return $role['role'];
+            }    
+        }
+    }
+
+    public function getStatus($id)
+    {
+        $model = $this->findModel($id);
+        
+        foreach (User::$status as $_status) {
+            if($model->status == $_status['key']) {
+                return $_status['status'];
+            }
+        }
+    }
 }

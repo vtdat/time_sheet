@@ -11,7 +11,7 @@ use frontend\models\TeamMember;
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 /* @var $form ActiveForm */
-$this->title = 'Sửa Profile';
+$this->title = 'Edit Profile';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php

@@ -1,8 +1,11 @@
 <?php
 use yii\helpers\Html;
 use common\models\User;
+use yii\i18n\Formatter;
 
-$this->title = 'điểm trung bình trong 1 tháng';
+$formatter = Yii::$app->formatter;
+
+$this->title = 'Statistics';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php

@@ -49,6 +49,9 @@ class UserController extends Controller
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination = [
+            'pageSize' => 10,
+        ];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -104,14 +107,22 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if(Yii::$app->user->isGuest) {
+            return $this->redirect('index.php');
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            $model = User::findModel(Yii::$app->user->identity->id);
+            if ($model->load(Yii::$app->request->post())){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+                $model->addTeam();
+                $model->save();
+                return $this->render('profile', ['model' => $model]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'id' => Yii::$app->user->identity->id,
+                ]);
+            }
         }
     }
 
