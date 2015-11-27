@@ -65,7 +65,6 @@ $formatter = Yii::$app->formatter;
                 ],
                 'group' => true,
                 'subGroupOf' => 0,
-                'headerOptions' => ['style' => 'text-align: center;'],
             ],            
             // WORKTIME column
             [
@@ -115,8 +114,6 @@ $formatter = Yii::$app->formatter;
                 'attribute' => 'comment',
                 'mergeHeader' => true,                
                 'vAlign' => GridView::ALIGN_TOP,
-                'width' => '17em',
-                'headerOptions' => ['style' => 'text-align: center;'],
             ],
             // POINT column
             [
@@ -134,7 +131,7 @@ $formatter = Yii::$app->formatter;
                 'filter'=>ArrayHelper::map(Timesheet::find()->orderBy('point')->asArray()->all(), 'point', 'point'),
                 'filterWidgetOptions' => [
                     'pluginOptions'=>['allowClear'=>true],
-                    'options'=>['placeholder'=> 'All'],
+                    'options'=>['placeholder'=> 'Point'],
                 ],
                 'hAlign' => GridView::ALIGN_CENTER,
             ],
@@ -180,7 +177,7 @@ $formatter = Yii::$app->formatter;
                     },
                 ],
                 'viewOptions' => ['label' => false],
-                'vAlign' => GridView::ALIGN_TOP,
+
             ],
             
         ];
@@ -200,7 +197,8 @@ $formatter = Yii::$app->formatter;
                 'class' => 'btn btn-success',
                 'fontAwesome' => true,
             ],
-        ]); ?>    
+        ]); ?>
+    
     </div>
     
     <?= GridView::widget([
@@ -225,6 +223,12 @@ $formatter = Yii::$app->formatter;
             ];
         },
         */
+        /*
+        'panel' => [
+            'heading' => '<span class="glyphicon glyphicon-list-alt"></span>',
+            'type' => GridView::TYPE_SUCCESS,
+        ],
+        */
         'toolbar' => [
             [
                 'content'=>
@@ -237,6 +241,7 @@ $formatter = Yii::$app->formatter;
         'export' => [
             'fontAwesome' => false,
             'label' => 'Export',
-        ],        
+        ],
+        
     ]); ?>
 </div>

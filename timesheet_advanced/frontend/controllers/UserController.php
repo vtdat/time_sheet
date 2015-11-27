@@ -107,22 +107,14 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->isGuest) {
-            return $this->redirect('index.php');
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $model = User::findModel(Yii::$app->user->identity->id);
-            if ($model->load(Yii::$app->request->post())){
-                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-                $model->upload();
-                $model->addTeam();
-                $model->save();
-                return $this->render('profile', ['model' => $model]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                    'id' => Yii::$app->user->identity->id,
-                ]);
-            }
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
     }
 

@@ -84,9 +84,6 @@ echo TabularForm::widget([
 			'columnOptions' => [
 				'hAlign' => 'center',
 			],
-			'options' => [
-				'rows' => 1,
-			]
 		],
 	],
 	'actionColumn' => [

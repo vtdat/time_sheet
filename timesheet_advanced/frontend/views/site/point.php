@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\Select2;
 use yii\widgets\ActiveForm;
+
 $this->title = 'Point';
 $this->params['breadcrumbs'][] = $this->title;
 ?>

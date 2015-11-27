@@ -356,7 +356,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
     }
-    
+
     public function calPoint($userid,$date){
         $timesheets=Timesheet::find()->where(['user_id'=>$userid])->all();
         $first=date('Y-m-01',strtotime($date));

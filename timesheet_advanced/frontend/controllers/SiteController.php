@@ -227,7 +227,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-
+    
     public function actionPoint(){
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

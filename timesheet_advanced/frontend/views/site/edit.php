@@ -11,7 +11,7 @@ use frontend\models\TeamMember;
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 /* @var $form ActiveForm */
-$this->title = 'Edit Profile';
+$this->title = 'Sửa Profile';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
@@ -55,9 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'value'=>$user->telephone,
         ])?>
         <?php
-        
             echo $form->field($model, 'imageFile')->fileInput() ;
-         
         ?>
         <?= 
             $form->field($model, 'team')->widget(

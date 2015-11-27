@@ -101,7 +101,7 @@ use common\models\User;
                         'options' => ['placeholder' => 'Select team'],
                         'pluginOptions' => [
                             'allowClear' => true,
-                            'width' => '13em',
+                            'width' => '10em',
                         ], 
                     ]
                 )
@@ -112,21 +112,17 @@ use common\models\User;
                         'data' => ArrayHelper::map(Process::find()->all(),'id','process_name'),
                         'pluginOptions' => [
                             'allowClear' => true,
-                            'width' => '13em',
+                            'width' => '10em',
                         ],
                         'options' => ['placeholder' => 'Select Process'],
                     ]
                 )?>
             </div>
-            <div class="col-md-2">
-                <?= $form->field($modelDetail, "[$i]work_time")->textInput(['placeholder' => 'Work time (hours)'])?>
-            </div>
-            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput(['placeholder' => 'Work details'])?></div>
-            <div class="col-md-3"><?= $form->field($modelDetail, "[$i]comment" )->textarea(['rows'=>1, 'cols' => 38])?></div>
-            <div class="col-md-1">
-                <?= Html::button('<span class="glyphicon glyphicon-remove"></span>', 
-                    ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) 
-                ?>
+            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_time" )->textInput()?></div>
+            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput()?></div>
+            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]comment" )->textarea(['rows'=>1])?></div>
+            <div class="col-md-2" style="padding-left: 30px;padding-bottom: 10px">
+                <?= Html::button('<span class="glyphicon glyphicon-remove"></span>', ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) ?>
             </div>
         </div>
       
