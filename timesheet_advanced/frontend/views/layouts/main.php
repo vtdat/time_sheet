@@ -44,7 +44,7 @@ AppAsset::register($this);
     } else {
         $menuItemsRight[] = [
             'label' => Yii::$app->user->identity->username,
-            'url' => Url::toRoute(['/site/profile'])
+            'url' => Url::toRoute(['/user/view','id' => Yii::$app->user->identity->id])
         ];
         $menuItemsRight[] = [
             'label' => 'Logout',
@@ -73,9 +73,9 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     ['label' => 'Manage', 'items' => [
-                        ['label' => 'User manage', 'url' => ['/user/']],
-                        ['label' => 'Team manage', 'url' => ['/team/']],
-                        ['label' => 'Process manage', 'url' => ['/process/']],
+                        ['label' => 'User', 'url' => ['/user/']],
+                        ['label' => 'Team', 'url' => ['/team/']],
+                        ['label' => 'Process', 'url' => ['/process/']],
                     ]],
                 ],
             ]);
