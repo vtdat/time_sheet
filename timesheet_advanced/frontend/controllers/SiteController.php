@@ -228,33 +228,6 @@ class SiteController extends Controller
         ]);
     }
     
-    public function actionProfile()
-    {
-        $id=Yii::$app->user->identity->id;
-        return $this->render('profile', ['model' => User::findModel($id)]);
-    }
-    
-    public function actionEdit()
-    {
-        if(Yii::$app->user->isGuest) {
-            return $this->redirect('index.php');
-        } else {
-            $model = User::findModel(Yii::$app->user->identity->id);
-            if ($model->load(Yii::$app->request->post())){
-                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-                $model->upload();
-                $model->addTeam();
-                $model->save();
-                return $this->render('profile', ['model' => $model]);
-            } else {
-                return $this->render('edit', [
-                    'model' => $model,
-                    'id' => Yii::$app->user->identity->id,
-                ]);
-            }
-            //return $this->render('edit', ['model' => User::findModel($id)]);
-        }
-    }
     public function actionPoint(){
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
