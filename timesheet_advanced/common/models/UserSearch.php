@@ -43,6 +43,8 @@ class UserSearch extends User
     {
         $query = User::find();
 
+        $query->joinWith('timesheets');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

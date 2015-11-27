@@ -4,11 +4,13 @@ namespace frontend\controllers;
 use Yii;
 use common\models\User;
 use common\models\LoginForm;
+use common\models\UserSearch;
 
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\WorkSearch;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -227,6 +229,14 @@ class SiteController extends Controller
     }
 
     public function actionPoint(){
-        return $this->render('point');
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination = [
+            'pageSize' => 10,
+        ];
+        return $this->render('point', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }
