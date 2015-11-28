@@ -12,9 +12,6 @@ use yii\filters\VerbFilter;
 use frontend\models\Timesheet;
 use frontend\models\TeamMember;
 
-use yii\web\UploadedFile;
-use yii\filters\AccessControl;
-
 /**
  * UserController implements the CRUD actions for User model.
  */
@@ -110,23 +107,14 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->isGuest) {
-            return $this->redirect('index.php');
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $model = User::findModel(Yii::$app->user->identity->id);
-            if ($model->load(Yii::$app->request->post())){
-                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-                $model->upload();
-                $model->addTeam();
-                $model->save();
-                return $this->render('view', ['model' => $model]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                    'id' => Yii::$app->user->identity->id,
-                ]);
-            }
-            //return $this->render('edit', ['model' => User::findModel($id)]);
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
     }
 
