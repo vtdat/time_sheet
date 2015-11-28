@@ -142,7 +142,7 @@ class ProcessController extends Controller
     }
     public function beforeAction($action){
         if (\Yii::$app->user->isGuest){ 
-            return $this->redirect('../web/index.php');
+            return $this->redirect('site');
         }
         $cur_level=Yii::$app->user->identity->role;
         if ($cur_level < 1) {

@@ -46,38 +46,38 @@ class TimesheetController extends Controller
      * Lists all Timesheet models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new TimesheetSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//    public function actionIndex()
+//    {
+//        $searchModel = new TimesheetSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Displays a single Timesheet model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
-        $query = Work::find()->where(['timesheet_id' => $id])->joinWith(['process','team']);
-
-        $searchModel = new WorkSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort' => false,
-        ]);
-
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//    public function actionView($id)
+//    {
+//        $query = Work::find()->where(['timesheet_id' => $id])->joinWith(['process','team']);
+//
+//        $searchModel = new WorkSearch();
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => $query,
+//            'sort' => false,
+//        ]);
+//
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Creates a new Timesheet model.
@@ -114,7 +114,13 @@ class TimesheetController extends Controller
      */
     public function actionUpdate($id)
     { 
+        if(!Timesheet::checkTimesheet(Yii::$app->user->getId(), $id)){
+            throw new HttpException(403, 'You have no permission to view this content');
+        }
         $model = $this->findModel($id);
+        if($model->status){
+            Yii::$app->session->setFlash("NoModify");
+        }
         $query = Work::find()->where(['timesheet_id' => $model->id]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -122,6 +128,10 @@ class TimesheetController extends Controller
         ]);
 
         if(Yii::$app->request->post()){
+            if($model->status){
+                Yii::$app->session->setFlash("NoModify");
+                return $this->goHome();
+            }
             $works = Yii::$app->request->post('Work');
             foreach ($works as $work) {
                 $new_work = Work::findOne($work['id']);
@@ -132,7 +142,7 @@ class TimesheetController extends Controller
                 }
             }
             Yii::$app->session->setFlash('updateOK');
-            return $this->redirect('index.php?r=timesheet/view&id='.$model->id);
+            return $this->redirect('timesheet/view?id='.$model->id);
         }
 
         return $this->render('update', ['model' => $model, 'dataProvider' => $dataProvider]);
@@ -147,7 +157,10 @@ class TimesheetController extends Controller
     public function actionDelete($id)
     {
         $timesheet = $this->findModel($id);
-
+        if($timesheet->status){
+                Yii::$app->session->setFlash("NoModify");
+                return $this->goHome();
+        }
         $works = $timesheet->getWorks()->all();
         foreach ($works as $work) {
             $work->delete();
