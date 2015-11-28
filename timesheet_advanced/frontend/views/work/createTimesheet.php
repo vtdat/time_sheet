@@ -54,7 +54,14 @@ use common\models\User;
             'showErrors'=>true,
         ],
     ]); ?>
-
+    <?php if($teamlist==null) { ?>
+        <div class="alert alert-danger">
+            <a href="../site/edit">
+                You need register your team in <strong>Profile page </strong>
+                before create timesheet !!
+            </a>
+        </div>
+    <?php } ?>
     <?php if(Yii::$app->session->hasFlash("NoModify")) { ?>
         <div class="alert alert-danger">
             <strong>Cannot modify! </strong>

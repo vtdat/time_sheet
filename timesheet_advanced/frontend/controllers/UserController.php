@@ -53,7 +53,7 @@ class UserController extends Controller
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination = [
-            'pageSize' => 10,
+            'pageSize' => 20,
         ];
 
         return $this->render('index', [
@@ -162,7 +162,7 @@ class UserController extends Controller
     }
     public function beforeAction($action){
         if (\Yii::$app->user->isGuest){ 
-            return $this->redirect('../web/index.php');
+            return $this->redirect('site');
         }
         $cur_level=Yii::$app->user->identity->role;
         if ($cur_level < 1) {

@@ -177,7 +177,7 @@ $formatter = Yii::$app->formatter;
                             $canEdit = 0;
                         }
                         if($canEdit) {
-                            $url = '../web/index.php?r=timesheet/update&id='.$model['timesheet_id'];
+                            $url = 'timesheet/update?id='.$model['timesheet_id'];
                             return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url);
                         }
                     },
