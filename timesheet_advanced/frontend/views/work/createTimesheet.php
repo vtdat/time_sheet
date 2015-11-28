@@ -18,13 +18,6 @@ use frontend\models\TeamMember;
 use frontend\models\Process;
 use common\models\User;
 ?>
-<!--
-<head>
-    <style type="text/css">
-    .work-form * {border: 1px solid gray;}
-    </style>
-</head>
--->
 
 <?php $this->registerJs("
     $('.delete-button').click(function() {
@@ -42,13 +35,14 @@ use common\models\User;
     foreach($teammember as $team){
         $teamlist[$team->team_id]=TeamMember::getTeamName($team->team_id);
     }
+    $point=User::calPoint($userid,date('Y-m-d'));
 ?>
 
 <div class="work-form container">
     <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
-    <div class="alert alert-warning">
+    <div class="alert alert-warning"> 
         <span class="glyphicon glyphicon-info-sign"></span>
-        <?="  Your average point of this month is <strong>".User::calPoint($userid,date('Y-m-d'))."</strong>"?>
+        <?="  Your average point of this month is <strong>".number_format($point,2,'.','')."</strong>"?>
     </div>
  
     <?php $form = ActiveForm::begin([
@@ -60,8 +54,7 @@ use common\models\User;
             'showErrors'=>true,
         ],
     ]); ?>
-    
-    
+
     <?php if(Yii::$app->session->hasFlash("NoModify")) { ?>
         <div class="alert alert-danger">
             <strong>Cannot modify! </strong>
@@ -101,7 +94,7 @@ use common\models\User;
                         'options' => ['placeholder' => 'Select team'],
                         'pluginOptions' => [
                             'allowClear' => true,
-                            'width' => '10em',
+                            'width' => '13em',
                         ], 
                     ]
                 )
@@ -112,17 +105,21 @@ use common\models\User;
                         'data' => ArrayHelper::map(Process::find()->all(),'id','process_name'),
                         'pluginOptions' => [
                             'allowClear' => true,
-                            'width' => '10em',
+                            'width' => '13em',
                         ],
                         'options' => ['placeholder' => 'Select Process'],
                     ]
                 )?>
             </div>
-            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_time" )->textInput()?></div>
-            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput()?></div>
-            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]comment" )->textarea(['rows'=>1])?></div>
-            <div class="col-md-2" style="padding-left: 30px;padding-bottom: 10px">
-                <?= Html::button('<span class="glyphicon glyphicon-remove"></span>', ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) ?>
+            <div class="col-md-2">
+                <?= $form->field($modelDetail, "[$i]work_time")->textInput(['placeholder' => 'Work time (hours)'])?>
+            </div>
+            <div class="col-md-2"><?= $form->field($modelDetail, "[$i]work_name" )->textInput(['placeholder' => 'Work details'])?></div>
+            <div class="col-md-3"><?= $form->field($modelDetail, "[$i]comment" )->textarea(['rows'=>1, 'cols' => 38])?></div>
+            <div class="col-md-1">
+                <?= Html::button('<span class="glyphicon glyphicon-remove"></span>', 
+                    ['class' => 'delete-button btn btn-danger', 'data-target' => "work-detail-$i"]) 
+                ?>
             </div>
         </div>
       

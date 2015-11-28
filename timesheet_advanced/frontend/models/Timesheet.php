@@ -85,7 +85,7 @@ class Timesheet extends \yii\db\ActiveRecord
         return $this->hasMany(Work::className(), ['timesheet_id' => 'id']);
     }
     
-    public function findTimesheet($_user_id,$_date){
+    public static function findTimesheet($_user_id,$_date){
         $list=Timesheet::findAll(['user_id'=>$_user_id]);
         foreach($list as $ts){
             if($ts->date==$_date){
@@ -95,7 +95,7 @@ class Timesheet extends \yii\db\ActiveRecord
         return null;
     }
     
-    public function deleteAllTimesheet($userid){
+    public static function deleteAllTimesheet($userid){
         $timesheets=Timesheet::find()->where(['user_id'=>$userid])->all();
         foreach($timesheets as $timesheet){
             if($timesheet!=null){
@@ -106,5 +106,16 @@ class Timesheet extends \yii\db\ActiveRecord
                 $timesheet->delete();
             }
         }
+    }
+    public static function checkTimesheet($userid, $timesheetid){
+        $timesheet=Timesheet::findOne(['id'=>$timesheetid]);
+        if($timesheet==null){
+        }
+        else{
+            if($timesheet->user_id!==$userid){
+                return false;
+            }
+        }
+        return true;
     }
 }

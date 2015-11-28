@@ -79,7 +79,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect('../web/index.php?r=work');
+            return $this->redirect('work');
         }
 
         $model = new LoginForm();
@@ -100,9 +100,8 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect('../web/index.php?r=work');
+            return $this->redirect('../work');
         }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
@@ -227,16 +226,52 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-    
+
     public function actionPoint(){
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination = [
-            'pageSize' => 10,
+//            'pageSize' => 10,
         ];
         return $this->render('point', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+    public function actionProfile(){
+        if(Yii::$app->user->isGuest) {
+            return $this->redirect('index');
+        }
+        return $this->render('profile', [
+            'model' => $this->findModel(Yii::$app->user->identity->id),
+        ]);
+    }
+    public function actionEdit(){
+        if(Yii::$app->user->isGuest) {
+            return $this->redirect('index');
+        } else {
+            $model = User::findModel(Yii::$app->user->identity->id);
+            if ($model->load(Yii::$app->request->post())){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+                $model->addTeam();
+                $model->save();
+                return $this->render('profile', ['model' => $model]);
+            } else {
+                return $this->render('edit', [
+                    'model' => $model,
+                    'id' => Yii::$app->user->identity->id,
+                ]);
+            }
+            //return $this->render('edit', ['model' => User::findModel($id)]);
+        }
+    }
+    protected function findModel($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

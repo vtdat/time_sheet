@@ -123,9 +123,7 @@ class WorkController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreatemulti(){
-        
-    }
+
     public function actionCreate()
     {   
         $id=Yii::$app->user->identity->id;
@@ -183,7 +181,7 @@ class WorkController extends Controller
                         $modelDetail->save();
                     }
                 }
-                return $this->redirect(['index', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         }
  
@@ -223,15 +221,19 @@ class WorkController extends Controller
     {
         $work = $this->findModel($id);
         $timesheet = Timesheet::find()->where(['id' => $work->timesheet_id])->one();
-        
+        if(($timesheet->status)||(Yii::$app->user->identity->id!==$timesheet->user_id)){
+                Yii::$app->session->setFlash("NoModify");
+                return $this->goHome();
+        }
         $workCounter = Work::find()->where(['timesheet_id' => $work->timesheet_id])->count();
         if($workCounter == 1) {
             $work->delete();
             $timesheet->delete();    
-            Yii::$app->session->setFlash('TimesheetDeleted');
+            Yii::$app->session->setFlash('TimesheetDELETED');
             return $this->goHome();
         } else {
             $work->delete();
+            Yii::$app->session->setFlash('WorkDeleted');
             return $this->redirect('index.php?r=timesheet/update&id='.$timesheet->id);
         }
     }

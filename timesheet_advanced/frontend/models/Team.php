@@ -75,7 +75,7 @@ class Team extends \yii\db\ActiveRecord
         return $this->hasMany(Work::className(), ['team_id' => 'id']);
     }
     
-    public function getTeamName($teamid){
+    public static function getTeamName($teamid){
         return Team::findOne($teamid)->team_name;
     }
     

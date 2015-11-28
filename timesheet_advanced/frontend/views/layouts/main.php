@@ -28,11 +28,10 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '<img src="/timesheet/frontend/uploads/logo.png" height = 25px/img>',
+        'brandLabel' => 'HBLAB',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -44,7 +43,7 @@ AppAsset::register($this);
     } else {
         $menuItemsRight[] = [
             'label' => Yii::$app->user->identity->username,
-            'url' => Url::toRoute(['/site/profile'])
+            'url' => Url::toRoute(['/site/profile']),
         ];
         $menuItemsRight[] = [
             'label' => 'Logout',
@@ -73,9 +72,9 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     ['label' => 'Manage', 'items' => [
-                        ['label' => 'User manage', 'url' => ['/user/']],
-                        ['label' => 'Team manage', 'url' => ['/team/']],
-                        ['label' => 'Process manage', 'url' => ['/process/']],
+                        ['label' => 'User', 'url' => ['/user/']],
+                        ['label' => 'Team', 'url' => ['/team/']],
+                        ['label' => 'Process', 'url' => ['/process/']],
                     ]],
                 ],
             ]);

@@ -25,7 +25,18 @@ $this->title = $formatter->asDate($model->date,'medium');
 <div class="timesheet-update">
 
 <h1 style="text-align: center;"><?= Html::encode($this->title) ?></h1>
-<br /><br /><br />
+<br />
+<?php if(Yii::$app->session->hasFlash("NoModify")) { ?>
+        <div class="alert alert-danger" style="text-align:center">
+            <strong>This timesheet has been marked!</strong>
+            Dont try to cheat me . lol =))
+        </div>
+<?php } ?>
+<?php if(Yii::$app->session->hasFlash("WorkDeleted")) { ?>
+        <div class="alert alert-danger">
+            <strong>Deleted a work! </strong>
+        </div>
+<?php } ?>
 <?php 
 
 $form = ActiveForm::begin();

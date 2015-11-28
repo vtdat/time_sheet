@@ -49,7 +49,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } ?>
     <br /><br />
     
-    <h4 style="font-weight: bold;">General information <a href="index.php?r=site/edit" class="btn btn-info" style=" float:right; font-size: 12px;" role="button" >Edit</a></h4>
+    <h4 style="font-weight: bold;">General information 
+        <a href="edit" class="btn btn-info" style=" float:right; font-size: 12px;" role="button" >Edit</a>
+    </h4>
     <div class="block" style="border-bottom: 2px solid #eee;"></div>
 
     <div id="contentBox" style="margin:20px auto 0 auto; width:100%">

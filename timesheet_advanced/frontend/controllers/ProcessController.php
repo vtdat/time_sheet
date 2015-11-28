@@ -7,6 +7,7 @@ use frontend\models\Process;
 use frontend\models\ProcessSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\HttpException;
 use yii\filters\VerbFilter;
 
 /**
@@ -139,7 +140,10 @@ class ProcessController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function beforeAction(){
+    public function beforeAction($action){
+        if (\Yii::$app->user->isGuest){ 
+            return $this->redirect('../web/index.php');
+        }
         $cur_level=Yii::$app->user->identity->role;
         if ($cur_level < 1) {
             throw new HttpException(403, 'You have no permission to view this content');

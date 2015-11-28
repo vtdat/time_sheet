@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Point',
                 'value' => function($data){return User::calPoint($data->id, date('Y-m-d'));},
-                'group' => true,
+                'group' => false,
                 'filterType' => GridView::FILTER_SELECT2,
                 'filterWidgetOptions' => [
                     'pluginOptions' => ['allowClear' => true],

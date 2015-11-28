@@ -26,11 +26,17 @@ $formatter = Yii::$app->formatter;
 <div class="work-index container-fluid">
 
     <h1 style="text-align: center; margin-bottom: 40px;"><?= Html::encode($this->title) ?></h1>
-
+    <?php if(Yii::$app->session->hasFlash('updateOK')) { ?>
+    <div class="alert alert-success">Updated successfully!</div>
+    <?php } ?>
     <?php if(Yii::$app->session->hasFlash('TimesheetDELETED')) { ?>
         <div class="alert alert-success">Deleted successfully!</div>
     <?php } ?>
-
+    <?php if(Yii::$app->session->hasFlash('NoModify')) { ?>
+        <div class="alert alert-danger">
+            <strong>Trying to modify this ?</strong>
+            Are you kidding me ??</div>
+    <?php } ?>    
     <?php 
         $gridColumns = [
             // DATE column

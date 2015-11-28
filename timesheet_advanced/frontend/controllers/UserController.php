@@ -12,6 +12,9 @@ use yii\filters\VerbFilter;
 use frontend\models\Timesheet;
 use frontend\models\TeamMember;
 
+use yii\web\UploadedFile;
+use yii\filters\AccessControl;
+
 /**
  * UserController implements the CRUD actions for User model.
  */
@@ -107,15 +110,19 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+            $model = User::findModel(Yii::$app->user->identity->id);
+            if ($model->load(Yii::$app->request->post())){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+                $model->addTeam();
+                $model->save();
+                return $this->render('view', ['model' => $model]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'id' => Yii::$app->user->identity->id,
+                ]);
+            }
     }
 
     /**
@@ -153,7 +160,10 @@ class UserController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function beforeAction(){
+    public function beforeAction($action){
+        if (\Yii::$app->user->isGuest){ 
+            return $this->redirect('../web/index.php');
+        }
         $cur_level=Yii::$app->user->identity->role;
         if ($cur_level < 1) {
             throw new HttpException(403, 'You have no permission to view this content');

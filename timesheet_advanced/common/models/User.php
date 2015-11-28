@@ -289,7 +289,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function findModel($id)
+    public static function findModel($id)
     {
         if (($model = User::findOne($id)) !== null) {
             return $model;
@@ -357,7 +357,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
-    public function calPoint($userid,$date){
+    public static function calPoint($userid,$date){
         $timesheets=Timesheet::find()->where(['user_id'=>$userid])->all();
         $first=date('Y-m-01',strtotime($date));
         $last=date('Y-m-t',strtotime($date));
@@ -375,9 +375,9 @@ class User extends ActiveRecord implements IdentityInterface
         return $sumpoint/$count;
     }
     
-    public function getRole($id)
+    public static function getRole($id)
     {
-        $model = $this->findModel($id);
+        $model = User::findModel($id);
 
         foreach (User::$roles as $role) {
             if($model->role == $role['key']) {
@@ -386,9 +386,9 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
-    public function getStatus($id)
+    public static function getStatus($id)
     {
-        $model = $this->findModel($id);
+        $model = User::findModel($id);
         
         foreach (User::$status as $_status) {
             if($model->status == $_status['key']) {

@@ -82,15 +82,15 @@ class TeamMember extends \yii\db\ActiveRecord
     }
 
     
-    public function getTeamName($teamid){
+    public static function getTeamName($teamid){
         return Team::findOne(['id'=>$teamid])->team_name;
     }
     
-    public function getObjectById($teamid,$userid){
+    public static function getObjectById($teamid,$userid){
         return TeamMember::findOne(['team_id'=>$teamid,'user_id'=>$userid]);
     }
    
-    public function getTeamListByUser($userid){
+    public static function getTeamListByUser($userid){
         $teamlist=TeamMember::find()->where(['user_id'=>$userid])->all();
         $teamid=[];
         foreach($teamlist as $team){
@@ -98,7 +98,7 @@ class TeamMember extends \yii\db\ActiveRecord
         }     
         return $teamid;
     }
-    public function deleteAllTeam($userid){
+    public static function deleteAllTeam($userid){
         $teams=TeamMember::find()->where(['user_id'=>$userid])->all();
         foreach($teams as $team){
             $team->delete();
